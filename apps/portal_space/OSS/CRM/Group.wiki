@@ -1,0 +1,27 @@
+@usedefault
+
+{{Group id:$$id}}
+
+h2. Group: ${name}
+
+h3. Details
+|*Group ID*|$$id|
+|*Name*|${name}|
+
+h3. Members
+{% for member in members -%}
+|[${members_name[loop.index-1]} | /oss/user?id=${member}]|
+{% endfor %}
+
+h3. Contact Information
+||ID||Type||Value||
+{% for contact in contacts -%}
+|${contact.id}|${contact.type}|${contact.value}|
+{% endfor %}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}
+

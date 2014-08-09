@@ -1,0 +1,16 @@
+@usedefault
+
+{{Pod id:$$id}}
+
+h2. Pod: ${name}
+
+h3. Details
+|*Pod ID*|$$id|
+|*Name*|${name}|
+|*Label*|${label}|
+|*Description*|${description}|
+|*Organization*|${organization_name}|
+|*Datacenter*|${datacenter_name}|
+
+h3. Racks
+{{oss.racks pod:$$id}}

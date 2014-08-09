@@ -1,0 +1,52 @@
+@usedefault
+
+{{Machine id:$$id}}
+
+h2. Machine Details:
+
+
+h3. Details
+|*Machine ID*|$$id|
+|*Name*|${name}|
+|*Organization*|[${organization_name}|/oss/organization?id=${organization.id}]|
+|*Description*|${description}|
+|*Label*|${label}|
+|*Parent*|[${parent}|/oss/Machine?id=${parent}]|
+|*Type*|${type}|
+|*Asset Host*|[${assethost}|oss/asset?id=${assethost}]|
+|*Memory*|${memory} GB|
+|*SSD Capacity*|${ssdcapacity} GB|
+|*HDD Capacity*|${hdcapacity} GB|
+|*CPU Frequency*|${cpumhz} MHz|
+|*Nr of CPU Cores*|${nrcores}|
+|*Nr of CPUs*|${nrcpu}|
+
+
+h3. Interfaces
+{% for intr in interfaces -%}
+* *Type:* ${intr.type} 
+** *VLAN ID:* ${intr.vlanid}
+** *VXLAN ID:* ${intr.vxlanid} 
+** *MAC Address:* ${intr.macaddr}
+** *Description:* ${intr.description}
+** *Organization:* ${intr.organization}
+** *Net Addresses:*
+||IP Addr||IPv6 Address||Description||
+{% for netaddr in intr.netaddr -%}
+|${netaddr.ipaddr}|${netaddr.ipaddr6}|${netaddr.description}|
+{% endfor %}
+{% endfor %}
+
+h3. Depends
+
+
+{% for dep in depends -%}
+{%- if loop.index > 1 -%}
+ , {% endif %}[${depends_names[loop.index-1]} | /oss/Machine?id=${dep}]
+{%- endfor %}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}

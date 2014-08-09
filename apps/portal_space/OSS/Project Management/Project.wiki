@@ -1,0 +1,57 @@
+@usedefault
+
+{{Project id:$$id}}
+
+{{jscript
+    $(document).ready(
+    function () {
+        $(".collapsibleTicket").hide();
+        $(".uncollapse").show();
+        $('h5').click(function() { $(this).next(".collapsibleTicket").toggle("fast") });
+    });
+}}  
+
+h2. Project: ${name}
+
+h5. Details
+|*Project ID*|$$id|
+|*Name*|${name}|
+|*Description*|${descr}|
+|*Organizations*|${organizations}|
+|*Deadline*|${deadline}|
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}
+
+
+h5. Tasks
+{{html:
+ <div class='collapsibleTicket uncollapse'>}}
+{{oss.tickets project:$$id type:task}}
+{{html:
+ </div>}}
+
+
+h5. Stories
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.tickets project:$$id type:story}}
+{{html:
+ </div>}}
+
+h5. Bugs
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.tickets project:$$id type:bug}}
+{{html:
+ </div>}}
+
+h5. Issues
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.tickets project:$$id type:issue}}
+{{html:
+ </div>}}

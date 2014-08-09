@@ -1,0 +1,51 @@
+@usedefault
+
+{{Asset id:$$id}}
+
+h2. Asset Details:
+
+
+h3. Details
+|*Asset ID*|$$id|
+|*Organization*|[${organization_names}|/oss/organization?id=${organization.id}]|
+|*Description*|${description}|
+|*Label*|${label}|
+|*Parent*|[${parent_name}|/oss/asset?id=${parent}]|
+|*Type*|${type}|
+|*Brand*|${brand}|
+|*Model*|${model}|
+|*Rack*|${rack_name}|
+|*Pod*|${pod_name}|
+|*Datacenter*|${datacenter_name}|
+|*U*|${U}|
+|*Type*|${type}|
+
+
+h3. Interfaces
+{% for intr in interfaces -%}
+* *Type:* ${intr.type} 
+** *VLAN ID:* ${intr.vlanid}
+** *VXLAN ID:* ${intr.vxlanid} 
+** *MAC Address:* ${intr.macaddr}
+** *Description:* ${intr.description}
+** *Organization:* ${intr.organization}
+** *Net Addresses:*
+||IP Addr||IPv6 Address||Description||
+{% for netaddr in intr.netaddr -%}
+|${netaddr.ipaddr}|${netaddr.ipaddr6}|${netaddr.description}|
+{% endfor %}
+{% endfor %}
+
+h3. Depends
+
+{% for dep in depends -%}
+{%- if loop.index > 1 -%}
+ , {% endif %}[${depends_names[loop.index-1]} | /oss/Asset?id=${dep}]
+{%- endfor %}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}
+

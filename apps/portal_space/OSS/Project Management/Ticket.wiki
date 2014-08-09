@@ -1,0 +1,36 @@
+@usedefault
+
+{{Ticket id:$$id}}
+
+h2. Ticket: ${name}
+
+h3. Details
+|*Ticket ID*|$$id|
+|*Name*|${name}|
+|*Description*|${description}|
+|*Priority*|${priority}|
+|*Project*|[${project_name}|/oss/project?id=${project}]|
+|*Type*|${type}|
+|*Parent*|[${parent_name}|/oss/ticket?id=${parent}]|
+|*Deadline*|${deadline}|
+|*Task Owner*|[${taskowner_name}|/oss/user?id=${taskowner}]|
+|*Sprint*|[${sprint_name}|/oss/sprint?id=${sprint}]|
+|*Organization*|[${organization_name}|/oss/organization?id=${organization}]|
+|*Source*|[${source_name}|/oss/user?id${source}]|
+
+
+h3. Depends on
+
+{% for dep in depends -%}
+{%- if loop.index > 1 -%}
+ , {% endif %}[${depends_names[loop.index-1]} | /oss/ticket?id=${dep}]
+{%- endfor %}
+
+
+h3. Duplicates
+
+{% for dup in duplicate -%}
+{%- if loop.index > 1 -%}
+ , {% endif %}[${duplicate_names[loop.index-1]} | /oss/ticket?id=${dup}]
+{%- endfor %}
+

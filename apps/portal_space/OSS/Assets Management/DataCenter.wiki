@@ -1,0 +1,28 @@
+@usedefault
+
+{{datacenter id:$$id}}
+
+h2. Datacenter
+
+h3. Details
+|*ID*|$$id|
+|*Name*|${name}|
+|*Label*|${label}|
+|*Organization*|[${organization_name}|/oss/organization?id=${organization}]|
+|*Description*|${description}|
+
+h3. Addresses
+||ID||Country||City||City Code||Street||Number||
+{% for address in addresses -%}
+|${address.id}|${address.country}|${address.city}|${address.citycode}|${address.street}|${address.nr}|
+{% endfor %}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}
+
+h3. Pods
+{{oss.pods datacenter:$$id}}
+

@@ -1,0 +1,25 @@
+@usedefault
+
+{{netaddr id:$$id}}
+
+h2. NetAddr Details:
+
+
+h3. Details
+|*NetAddr ID*|$$id|
+|*IP Address*|${ipaddr}|
+|*IPv6 Address*|${ipaddr6}|
+|*Description*|${description}|
+|*Support Remarks*|${supportremarks}|
+
+h3. Machines using this IP
+{{oss.machines interface.netaddr.ipaddr:${ipaddr}}}
+
+h3. Assets using this IP
+{{oss.assets interface.netaddr.ipaddr:${ipaddr}}}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}

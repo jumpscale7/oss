@@ -1,0 +1,83 @@
+@usedefault
+
+{{User id:$$id}}
+
+{{jscript
+    $(document).ready(
+    function () {
+        $(".collapsibleTicket").hide();
+        $(".uncollapse").show();
+        $('h5').click(function() { $(this).next(".collapsibleTicket").toggle("fast") });
+    });
+}}
+
+h2. User: ${name}
+
+h3. Details
+|*User ID*|$$id|
+|*Name*|${name}|
+|*Organization*|${organization}|
+
+h3. Contact Information
+||ID||Type||Value||
+{% for contact in contacts -%}
+|${contact.id}|${contact.type}|${contact.value}|
+{% endfor %}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}
+
+h3. Tickets
+
+h5. Tasks
+{{html:
+ <div class='collapsibleTicket uncollapse'>}}
+{{oss.ticketswithdata taskowner:$$id type:task}}
+{{html:
+ </div>}}
+
+h5. Tickets
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.ticketswithdata taskowner:$$id type:ticket}}
+{{html:
+ </div>}}
+
+h5. Stories
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.ticketswithdata taskowner:$$id type:story}}
+{{html:
+ </div>}}
+
+h5. Bugs
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.ticketswithdata taskowner:$$id type:bug}}
+{{html:
+ </div>}}
+
+h5. Features
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.ticketswithdata taskowner:$$id type:feature}}
+{{html:
+ </div>}}
+
+h5. Events
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.ticketswithdata taskowner:$$id type:event}}
+{{html:
+ </div>}}
+
+h5. Issues
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.ticketswithdata taskowner:$$id type:issue}}
+{{html:
+ </div>}}
+

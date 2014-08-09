@@ -1,0 +1,12 @@
+@usedefault
+
+{{Message id:$$id}}
+
+h2. Message: ${name}
+
+h3. Details
+|*Message ID*|$$id|
+|*Subject*|${subject}|
+|*Destination*|${destination}|
+|*Time*|${time}|
+|*Ticket*|[${ticket.name}|/oss/ticket?id=${ticket.id}]|

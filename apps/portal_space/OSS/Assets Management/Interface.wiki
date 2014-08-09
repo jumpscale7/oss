@@ -1,0 +1,40 @@
+@usedefault
+
+{{Interface id:$$id}}
+
+h2. Interface Details:
+
+
+h3. Details
+|*Interface ID*|$$id|
+|*Type*|${type}|
+|*Brand*|${brand}|
+|*Model*|${model}|
+|*Support Remarks*|${supportremarks}|
+|*VLAN ID*|${vlanid}|
+|*VXLAN ID*|${vxlanid}|
+|*MAC Address*|${macaddr}|
+|*Organization*|[${organization.name}|/oss/organization?id=${organization.id}]|
+|*Description*|${description}|
+
+
+
+h3. Net Adresses
+
+||IP Addr||IPv6 Address||Description||
+{% for netaddr in netaddr -%}
+|${netaddr.ipaddr}|${netaddr.ipaddr6}|${netaddr.description}|
+{% endfor %}
+
+h3. Connects
+
+{% for conn in connects -%}
+{%- if loop.index > 1 -%}
+ , {% endif %}[${conn}|/oss/interface?id=${conn}]
+{%- endfor %}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}

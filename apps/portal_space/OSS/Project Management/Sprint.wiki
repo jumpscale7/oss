@@ -1,0 +1,28 @@
+@usedefault
+
+{{Sprint id:$$id}}
+
+h2. Sprint: ${name}
+
+h3. Details
+|*Sprint ID*|$$id|
+|*Name*|${name}|
+|*Description*|${description}|
+|*Start Time*|${start}|
+|*End Time*|${stop}|
+
+
+h3. Organizations
+
+{% for org in organizations -%}
+[${organizations_names[loop.index-1]} | /oss/organization?id=${org}]
+{% endfor %}
+
+h3. Tickets
+{{oss.tickets type:story sprint:$$id}}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}

@@ -1,0 +1,17 @@
+@usedefault
+
+{{Job id:$$id}}
+
+h2. Job: ${name}
+
+h3. Details
+|*Job ID*|$$id|
+|*Name*|${name}|
+|*Start Date*|${startdate}|
+|*End Date*|${enddate}|
+|*Status*|${status}|
+
+||Step Name||Warning Time||Critical Time||Next Step||Status||Logs||Params||
+{% for step in steps -%}
+|${step.name}|${step.warningtime}|${step.criticaltime}|${step.nextstep}|${step.status}|${step.logs}|${step.params}|
+{% endfor %}

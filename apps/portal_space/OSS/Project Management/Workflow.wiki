@@ -1,0 +1,16 @@
+@usedefault
+
+{{Workflow id:$$id}}
+
+h2. Workflow: ${name}
+
+h3. Details
+|*Workflow ID*|$$id|
+|*Name*|${name}|
+|*Description*|${description}|
+
+h3. Steps
+||Step Name||Description||Warning Time||Critical Time||Next Steps||Next Error Steps||JScript||
+{% for step in steps -%}
+|${step.name}|${step.description}|${step.warningtime}|${step.criticaltime}|${step.nextsteps}|${step.nextsteps_error}|${step.jscript}|
+{% endfor %}

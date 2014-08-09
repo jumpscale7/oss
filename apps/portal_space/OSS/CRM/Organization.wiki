@@ -1,0 +1,34 @@
+@usedefault
+
+{{organization id:$$id}}
+
+h2. Organization: ${name}
+
+h3. Details
+|*Organization ID*|$$id|
+|*Name*|${name}|
+|*Company Name*|${companyname}|
+|*Parent*|[${parent_name}|/oss/organization?id=${parent}]|
+|*Description*|${description}|
+|*VAT Number*|${vatnr}|
+
+h3. Contact Information
+||ID||Type||Value||
+{% for contact in contacts -%}
+|${contact.id}|${contact.type}|${contact.value}|
+{% endfor %}
+
+
+h3. Addresses
+||ID||Country||City||City Code||Street||Number||
+{% for address in addresses -%}
+|${address.id}|${address.country}|${address.city}|${address.citycode}|${address.street}|${address.nr}|
+{% endfor %}
+
+h3. Comments
+||Time||Author||Comment||
+{% for comment in comments -%}
+|${comment.time}|${comment.author}|${comment.comment}|
+{% endfor %}
+
+

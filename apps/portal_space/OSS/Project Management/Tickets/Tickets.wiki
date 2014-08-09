@@ -1,0 +1,62 @@
+@usedefault
+
+{{jscript
+    $(document).ready(
+    function () {
+        $(".collapsibleTicket").hide();
+        $(".uncollapse").show();
+        $('h3').click(function() { $(this).next(".collapsibleTicket").toggle("fast") });
+    });
+}}
+
+h2. Tickets
+
+h3. Ticket
+{{html:
+ <div class='collapsibleTicket uncollapse'>}}
+{{oss.tickets type:ticket}}
+{{html:
+ </div>}}
+
+ h3. Tasks
+{{html:
+ <div class='collapsibleTicket uncollapse'>}}
+{{oss.tickets type:task}}
+{{html:
+ </div>}}
+
+
+h3. Stories
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.tickets type:story}}
+{{html:
+ </div>}}
+
+h3. Bugs
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.tickets type:bug}}
+{{html:
+ </div>}}
+
+h3. Features
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.tickets type:feature}}
+{{html:
+ </div>}}
+
+h3. Events
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.tickets type:event}}
+{{html:
+ </div>}}
+
+h3. Issues
+{{html:
+ <div class='collapsibleTicket'>}}
+{{oss.tickets type:issue}}
+{{html:
+ </div>}}
