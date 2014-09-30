@@ -11,21 +11,19 @@ Help:/Help
 }}
 
 {{menuadmin_oss}}
+
+@block
+
+@row
 @col 3
 {{navigation}}
 @divend
 
-{{cssstyle
-    .dataTables_wrapper{
-        max-width: 100%;
-    }
-    .span6{
-        width:46.5% !important;
-    }
-}}
 @col 9
 {content}
+@divend
 
+#row
 @divend
 @divend
 
