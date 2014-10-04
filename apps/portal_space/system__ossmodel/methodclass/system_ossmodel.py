@@ -80,7 +80,7 @@ class system_ossmodel(j.code.classGetBase()):
         param:type type of the object e.g. user or organization
         """
         if not type:
-            categories = self.osis.listNamespaceCategories('oss')
+            categories = self.osis.listNamespaceCategories('oss')            
             for cat in categories:
                 cl=self._getOsisClient(cat)
                 cl.demodata()
