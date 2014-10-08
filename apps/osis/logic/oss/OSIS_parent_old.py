@@ -263,10 +263,8 @@ class mainclass(OSISStore):
         """
         return all object id's stored in DB
         """
-        from IPython import embed
-        print "DEBUG NOW list"
-        embed()
-        
+        ##TODO
+        pass
 
     def rebuildindex(self):
         path=j.system.fs.joinPaths(self.path,"index.py")
@@ -279,9 +277,6 @@ class mainclass(OSISStore):
         export all objects of a category to json format.
         Placed in outputpath
         """
-        from IPython import embed
-        print "DEBUG NOW export"
-        embed()
         
         if not j.system.fs.isDir(outputpath):
             j.system.fs.createDir(outputpath)
@@ -293,11 +288,7 @@ class mainclass(OSISStore):
                 obj = json.dumps(obj)
             j.system.fs.writeFile(filename, obj)
 
-    def importFromPath(self, path):
-        from IPython import embed
-        print "DEBUG NOW import"
-        embed()
-        
+    def importFromPath(self, path):      
         '''Imports OSIS category from file system'''
         if not j.system.fs.exists(path):
             raise RuntimeError("Can't find the specified path: %s" % path)
