@@ -2,8 +2,6 @@ from JumpScale import j
 
 class oss_message_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
-        self._P_id=0
-    
         self._P_subject=""
     
         self._P_message=""
@@ -14,7 +12,11 @@ class oss_message_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_type=""
     
+        self._P_format=""
+    
         self._P_ticket=0
+    
+        self._P_id=0
     
         self._P_guid=""
     
@@ -24,26 +26,6 @@ class oss_message_osismodelbase(j.code.classGetJSRootModelBase()):
     
 
         pass
-
-    @property
-    def id(self):
-        return self._P_id
-    @id.setter
-    def id(self, value):
-        
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
-            else:
-                msg="property id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: message, value was:" + str(value)
-                raise RuntimeError(msg)
-    
-
-        self._P_id=value
-    @id.deleter
-    def id(self):
-        del self._P_id
-
 
     @property
     def subject(self):
@@ -146,6 +128,26 @@ class oss_message_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
+    def format(self):
+        return self._P_format
+    @format.setter
+    def format(self, value):
+        
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
+            else:
+                msg="property format input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: message, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_format=value
+    @format.deleter
+    def format(self):
+        del self._P_format
+
+
+    @property
     def ticket(self):
         return self._P_ticket
     @ticket.setter
@@ -163,6 +165,26 @@ class oss_message_osismodelbase(j.code.classGetJSRootModelBase()):
     @ticket.deleter
     def ticket(self):
         del self._P_ticket
+
+
+    @property
+    def id(self):
+        return self._P_id
+    @id.setter
+    def id(self, value):
+        
+        if not isinstance(value, int) and value is not None:
+            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
+                value = j.basetype.integer.fromString(value)
+            else:
+                msg="property id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: message, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_id=value
+    @id.deleter
+    def id(self):
+        del self._P_id
 
 
     @property

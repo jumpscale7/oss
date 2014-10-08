@@ -40,6 +40,8 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_nrcpu=0
     
+        self._P_rootpasswd=""
+    
         self._P_acl=dict()
     
         self._P_comments=list()
@@ -434,6 +436,26 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
+    def rootpasswd(self):
+        return self._P_rootpasswd
+    @rootpasswd.setter
+    def rootpasswd(self, value):
+        
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
+            else:
+                msg="property rootpasswd input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_rootpasswd=value
+    @rootpasswd.deleter
+    def rootpasswd(self):
+        del self._P_rootpasswd
+
+
+    @property
     def acl(self):
         return self._P_acl
     @acl.setter
@@ -524,19 +546,5 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
         if self._P_interfaces[-1].__dict__.has_key("_P_id"):
             self._P_interfaces[-1].id=len(self._P_interfaces)
         return self._P_interfaces[-1]
-        
-    
-
-    def new_comment(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","comment")()
-        else:
-            value2=value
-        
-        self._P_comments.append(value2)
-        if self._P_comments[-1].__dict__.has_key("_P_id"):
-            self._P_comments[-1].id=len(self._P_comments)
-        return self._P_comments[-1]
         
     

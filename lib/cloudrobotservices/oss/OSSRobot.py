@@ -11,23 +11,28 @@ ticket (issue,bug,feature,task,event,perfissue,check)
 -- id
 -- name
 -- description
--- project #as name
--- who #name of person who will do it (email or username)
--- prio #0-4,4 being highest, see below
--- descr (description,d)
+-- priority #0-4,4 being highest
+-- project #reference to projectid or name
+-- type #supported types: story;task;issue;event;bug;feature;ticket;perfissue,check
 -- parent #specify part of name or id of task which we are subtask for
 -- depends #specify part of name or id of task which we depend on, do comma separated if more than 1
--- deadline
 -- duplicate #comma separated list of id's 
+-- taskowner #name of person who will do it (email or username)
+-- descr (description,d)
+-- deadline
 -- source #id or name or email of person who created the ticket
 -- sprint #id or (part of name) name of sprint
 -- organization #id or (part of name) name of organization
 -- nextstep #epoch or time from now notation (e.g. +4d, +1m)
+-- workflow #current workflow active
 -- jobs #list of ids to jobs
+-- job_status #values: PENDING,ACTIVE,ERROR,OK,WARNING,CRITICAL
 -- time_created         #epoch
 -- time_lastmessage     #epoch
 -- time_lastresponse    #epoch
 -- time_closed          #epoch
+-- messages #reference to messages (comma separated)
+-- comments #reference to comments (comma separated)
 -- datasources #comma separated list of datasources e.g. osticket, ...
 -- acl                  #as tags 'admin:RW guest:R'
 -- params               #json repr of dict with args or as tags (if possible)
@@ -45,15 +50,13 @@ ticket (issue,bug,feature,task,event,perfissue,check)
 -- id
 
 - comment
--- id #id of org 
--- name #name or part of name of org (if id not used)
 -- comment
 -- created
 -- author
 
 - assign
 -- id
--- who
+-- taskowner
 
 - duplicate
 -- id
@@ -69,6 +72,7 @@ ticket (issue,bug,feature,task,event,perfissue,check)
 -- destination #as comma separated
 -- time #epoch
 -- type #email;sms;gtalk;tel
+-- format #html;confl;md;text default is text
 
 - depend
 -- id
@@ -88,26 +92,33 @@ ticket (issue,bug,feature,task,event,perfissue,check)
 ##############################################################################
 organization
 - create (c,n,new,update,u)
--- name
 -- id
+-- name
 -- description
 -- companyname
 -- parent #specify part of name or id of organization
 -- vatnr
--- datasources #comma separated list of datasources
 -- acl                  #as tags 'admin:RW guest:R'
 
 - address
--- id #id of org 
--- name #name or part of name of org (if id not used)
+-- orgid #id of org 
+-- orgname #name or part of name of org (if id not used)
 -- country
 -- city
 -- citycode
+-- zone
+-- region
 -- street
 -- nr
+-- floor
 
-- contact
--- id #id of org
+- datasource
+-- id
+-- name #name or part of name of org (if id not used)
+-- datasourcename
+
+- contactmethod
+-- orgid #id of org
 -- name #name or part of name of org (if id not used)
 -- type #phone;mobile;email;skype
 -- value
@@ -134,23 +145,30 @@ organization
 ##############################################################################
 user
 - create (c,n,new,update,u)
--- name
 -- id
+-- name
 -- organization
--- datasources #comma separated list of datasources
 -- acl                  #as tags 'admin:RW guest:R'
 
 - address
--- id #id of user 
--- name #name or part of name of user (if id not used)
+-- userid #id of user 
+-- username #name or part of name of user (if userid not used)
 -- country
 -- city
 -- citycode
+-- zone
+-- region
 -- street
 -- nr
+-- floor
 
-- contact
--- id #id of user
+- datasource
+-- id
+-- name
+-- datasourcename
+
+- contactmethod
+-- userid #id of user
 -- name #name or part of name of user (if id not used)
 -- type #phone;mobile;email;skype
 -- value
@@ -178,17 +196,27 @@ user
 ##############################################################################
 group
 - create (c,n,new,update,u)
--- name
 -- id
--- members #comma separated list of members, member is group defined as id, or name or part of name or even email
+-- name
+-- members #comma separated list of members, member of group defined as id, or name or part of name or even email
 -- datasources #comma separated list of datasources
 -- acl                  #as tags 'admin:RW guest:R'
 
-- contact
+- member
+-- groupid
+-- group #name of group (if groupid not used)
+-- user #id or part of name
+
+- contactmethod
 -- id #id of group
 -- name #name or part of name of group (if id not used)
 -- type #phone;mobile;email;skype
 -- value
+
+- datasource
+-- id
+-- name
+-- datasourcename
 
 - export 
 -- filter (f) #is filter which is query str for osis
@@ -213,12 +241,10 @@ group
 ##############################################################################
 project
 - create (c,n,new,update,u)
+-- id
 -- name
 -- description
--- organizations #comma separated list of orgs (as id, name part of name)
 -- deadline #as epoch or as future notation  e.g. +4d
--- id
--- datasources #comma separated list of datasources
 -- acl                  #as tags 'admin:RW guest:R'
 
 - export 
@@ -232,6 +258,16 @@ project
 
 - delete (d,del)
 -- id
+
+- organization
+-- id
+-- name
+-- organization
+
+- datasource
+-- id
+-- name
+-- datasourcename
 
 - comment
 -- id #id of group 
@@ -445,6 +481,229 @@ machine
 - delete (d,del)
 -- id
 
+- interface
+-- id
+-- name
+-- interface
+
+- datasource
+-- id
+-- name
+-- datasourcename
+
+- depend
+-- id
+-- name (n) #speciy name or part of name
+-- on #depend on (speciy name or part of name or id)
+
+- comment
+-- id #id of group 
+-- name #name or part of name of group (if id not used)
+-- comment
+-- created
+-- author
+
+
+##############################################################################
+service
+- create (c,n,new,update,u)
+-- id
+-- name
+-- organization
+-- label
+-- description
+-- type
+-- machinehost
+-- memory
+-- ssdcapacity
+-- hdcapacity
+-- cpumhz
+-- nrcores
+-- nrcpu
+-- organization    #comma separated list of orgs (as id, name part of name)
+-- parent           #name, part of name, id, label, part of label of machine
+-- depends          #comma separed list of machines we depend on (name, part of name, id, label, part of label of machine)
+-- admin_name
+-- admin_passwd
+-- acl              #as tags 'admin:RW guest:R'
+
+- export 
+-- filter (f) #is filter which is query str for osis
+
+- list (l)
+-- max #max amount of items
+-- start #startpoint e.g. 10 is id
+-- filter (f) #is filter which is query str for osis
+-- verbose (v) #1-3 3 being most verbose
+
+- delete (d,del)
+-- id
+
+- serviceport
+-- id
+-- name
+-- serviceport
+
+- depend
+-- id
+-- name (n) #speciy name or part of name
+-- on #depend on (speciy name or part of name or id)
+
+- comment
+-- id #id of group 
+-- name #name or part of name of group (if id not used)
+-- comment
+-- created
+-- author
+
+##############################################################################
+document
+- create (c,n,new,update,u)
+-- id
+-- name
+-- description
+-- creationdate
+-- moddate
+-- type
+-- ext
+-- contents
+-- objstorid
+-- parent
+-- acl              #as tags 'admin:RW guest:R'
+
+- export 
+-- filter (f) #is filter which is query str for osis
+
+- list (l)
+-- max #max amount of items
+-- start #startpoint e.g. 10 is id
+-- filter (f) #is filter which is query str for osis
+-- verbose (v) #1-3 3 being most verbose
+
+- delete (d,del)
+-- id
+
+- comment
+-- id #id of group 
+-- name #name or part of name of group (if id not used)
+-- comment
+-- created
+-- author
+
+##############################################################################
+workflow
+- create (c,n,new,update,u)
+-- id
+-- name
+-- description
+-- tickettype
+-- firststep
+-- acl              #as tags 'admin:RW guest:R'
+
+- export 
+-- filter (f) #is filter which is query str for osis
+
+- list (l)
+-- max #max amount of items
+-- start #startpoint e.g. 10 is id
+-- filter (f) #is filter which is query str for osis
+-- verbose (v) #1-3 3 being most verbose
+
+- delete (d,del)
+-- id
+
+- comment
+-- id #id of group 
+-- name #name or part of name of group (if id not used)
+-- comment
+-- created
+-- author
+
+##############################################################################
+workflowstep
+- create (c,n,new,update,u)
+-- id
+-- name
+-- description
+-- warningtime
+-- criticaltime
+-- nextstep
+-- nextsteps_error
+-- jscript
+-- acl              #as tags 'admin:RW guest:R'
+
+- export 
+-- filter (f) #is filter which is query str for osis
+
+- list (l)
+-- max #max amount of items
+-- start #startpoint e.g. 10 is id
+-- filter (f) #is filter which is query str for osis
+-- verbose (v) #1-3 3 being most verbose
+
+- delete (d,del)
+-- id
+
+- comment
+-- id #id of group 
+-- name #name or part of name of group (if id not used)
+-- comment
+-- created
+-- author
+
+
+##############################################################################
+job
+- create (c,n,new,update,u)
+-- id
+-- workflow
+-- startdate
+-- enddate
+-- status
+
+- export 
+-- filter (f) #is filter which is query str for osis
+
+- list (l)
+-- max #max amount of items
+-- start #startpoint e.g. 10 is id
+-- filter (f) #is filter which is query str for osis
+-- verbose (v) #1-3 3 being most verbose
+
+- delete (d,del)
+-- id
+
+
+##############################################################################
+jobstep
+- create (c,n,new,update,u)
+-- id
+-- jobguid
+-- workflowstep
+-- description
+-- order
+-- params
+-- warningtime
+-- criticaltime
+-- startdate
+-- enddate
+-- jscript
+-- status
+-- nextsteps
+-- logs
+
+- export 
+-- filter (f) #is filter which is query str for osis
+
+- list (l)
+-- max #max amount of items
+-- start #startpoint e.g. 10 is id
+-- filter (f) #is filter which is query str for osis
+-- verbose (v) #1-3 3 being most verbose
+
+- delete (d,del)
+-- id
+
 - comment
 -- id #id of group 
 -- name #name or part of name of group (if id not used)
@@ -481,25 +740,27 @@ class OSSRobotCmds():
             organization = self.osscl.organization.get(int(args.get('id')))
         else:
             organization = self.osscl.organization.new()
-        organization.name = args.get('name')
-        organization.description = args.get('description')
-        organization.companyname = args.get('companyname')
-        organization.parent = args.get('parent')
-        organization.vatnr = args.get('vatnr')
-        # TODO set data sources
+        organization.name = args.get('name') if args.get('name') else organization.name
+        organization.description = args.get('description') if args.get('description') else organization.description
+        organization.companyname = args.get('companyname') if args.get('companyname') else organization.companyname
+        parent = args.get('parent')
+        nativequery={'$or':[{'guid':parent}, {'name':parent}]}
+        parent = self.osscl.organization.simpleSearch({}, nativequery=nativequery)
+        organization.parent = parent[0]['guid'] if parent else organization.parent
+        organization.vatnr = args.get('vatnr') if args.get('vatnr') else organization.vatnr
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            organization.acl = tags.getDict()
+            organization.acl = tags.getDict() if tags.getDict() else organization.acl
         self.osscl.organization.set(organization)
         return 'Organization was created/updated successfully'
 
     def organization__address(self, **args):
-        if args.get('id'):
+        if args.get('orgid'):
             if not self.osscl.organization.exists(int(args.get('id'))):
-                return 'Organization with ID %s was not found.' % args.get('id')
-            organization = self.osscl.organization.get(int(args.get('id')))
-        elif args.get('name'):
-            organization = self.osscl.organization.simpleSearch({'name': args.get('name')})
+                return 'Organization with ID %s was not found.' % args.get('orgid')
+            organization = self.osscl.organization.get(int(args.get('orgid')))
+        elif args.get('orgname'):
+            organization = self.osscl.organization.simpleSearch({'orgname': args.get('orgname')})
             if organization:
                 organization = self.osscl.organization.get(organization[0]['id'])
             else:
@@ -507,19 +768,39 @@ class OSSRobotCmds():
         else:
             return 'Organization ID or name must be passed'
         address = organization.new_address()
-        address.country = args.get('country')
-        address.city = args.get('city')
-        address.citycode = args.get('citycode')
-        address.street = args.get('street')
-        address.nr = args.get('nr')
+        address.country = args.get('country') if args.get('country') else address.country
+        address.city = args.get('city') if args.get('city') else address.city
+        address.citycode = args.get('citycode') if args.get('citycode') else address.citycode
+        address.zone = args.get('zone') if args.get('zone') else address.zone
+        address.region = args.get('region') if args.get('region') else address.region
+        address.street = args.get('street') if args.get('street') else address.street
+        address.nr = args.get('nr') if args.get('nr') else address.nr
         self.osscl.organization.set(organization)
         return 'Organization address was added successfully'
 
-    def organization__contact(self, **args):
-        if args.get('id'):
-            if not self.osscl.organization.exists(int(args.get('id'))):
+    def organization__datasource(self, **args):
+        if args.get('orgid'):
+            if not self.osscl.organization.exists(int(args.get('orgid'))):
                 return 'Organization with ID %s was not found.' % args.get('id')
-            organization = self.osscl.organization.get(int(args.get('id')))
+            organization = self.osscl.organization.get(int(args.get('orgid')))
+        elif args.get('orgname'):
+            organization = self.osscl.organization.simpleSearch({'orgname': args.get('orgname')})
+            if organization:
+                organization = self.osscl.organization.get(organization[0]['id'])
+            else:
+                return 'Organization with name %s can not be found' % args.get('name')
+        else:
+            return 'Organization ID or name must be passed'
+        datasource = organization.new_datasource()
+        datasource.name = args.get('name') if args.get('name') else datasource.name
+        self.osscl.organization.set(organization)
+        return 'Organization datasource was added successfully'
+
+    def organization__contactmethod(self, **args):
+        if args.get('orgid'):
+            if not self.osscl.organization.exists(int(args.get('orgid'))):
+                return 'Organization with ID %s was not found.' % args.get('orgid')
+            organization = self.osscl.organization.get(int(args.get('orgid')))
         elif args.get('name'):
             organization = self.osscl.organization.simpleSearch({'name': args.get('name')})
             if organization:
@@ -528,11 +809,11 @@ class OSSRobotCmds():
                 return 'Organization with name %s can not be found' % args.get('name')
         else:
             return 'Organization ID or name must be passed'
-        contact = organization.new_contact()
-        contact.type = args.get('type')
-        contact.value = args.get('value')
+        contactmethod = organization.new_contactmethod()
+        contactmethod.type = args.get('type') if args.get('type') else contactmethod.type
+        contactmethod.value = args.get('value') if args.get('value') else contactmethod.value
         self.osscl.organization.set(organization)
-        return 'Organization contact was added successfully'
+        return 'Organization contactmethod was added successfully'
 
     def organization__list(self, **args):
         q = dict()
@@ -560,9 +841,12 @@ class OSSRobotCmds():
         else:
             return 'Organization ID or name must be passed'
         comment = organization.new_comment()
-        comment.comment = args.get('comment')
-        comment.time = args.get('created')
-        comment.author = args.get('author')
+        comment.comment = args.get('comment') if args.get('comment') else comment.comment
+        comment.time = args.get('created') if args.get('created') else comment.time
+        author = args.get('author')
+        nativequery={'$or':[{'guid':author}, {'name':author}]}
+        author = self.osscl.user.simpleSearch({}, nativequery=nativequery)
+        comment.author = author[0]['guid'] if author else comment.author
         self.osscl.organization.set(organization)
         return 'Organization comment was added successfully'
 
@@ -573,16 +857,15 @@ class OSSRobotCmds():
             group = self.osscl.group.get(int(args.get('id')))
         else:
             group = self.osscl.group.new()
-        group.name = args.get('name')
-        group.members = args.get('members')
-        # TODO set data sources
+        group.name = args.get('name', group.name)
+        group.members = args.get('members', group.members)
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            group.acl = tags.getDict()
+            group.acl = tags.getDict() if tags.getDict() else group.acl
         self.osscl.group.set(group)
         return 'Group was created/updated successfully'
 
-    def group__contact(self, **args):
+    def group__contactmethod(self, **args):
         if args.get('id'):
             if not self.osscl.group.exists(int(args.get('id'))):
                 return 'Group with ID %s was not found.' % args.get('id')
@@ -595,11 +878,79 @@ class OSSRobotCmds():
                 return 'Group with name %s can not be found' % args.get('name')
         else:
             return 'Group ID or name must be passed'
-        contact = group.new_contact()
-        contact.type = args.get('type')
-        contact.value = args.get('value')
+        contactmethod = group.new_contactmethod()
+        contactmethod.type = args.get('type', contactmethod.type)
+        contactmethod.value = args.get('value', contactmethod.value)
         self.osscl.group.set(group)
-        return 'Group contact was added successfully'
+        return 'Group contactmethod was added successfully'
+
+    def group__datasource(self, **args):
+        if args.get('id'):
+            if not self.osscl.group.exists(int(args.get('id'))):
+                return 'Group with ID %s was not found.' % args.get('id')
+            group = self.osscl.group.get(int(args.get('id')))
+        elif args.get('name'):
+            group = self.osscl.group.simpleSearch({'name': args.get('name')})
+            if group:
+                group = self.osscl.group.get(group[0]['id'])
+            else:
+                return 'Group with name %s can not be found' % args.get('name')
+        else:
+            return 'Group ID must be passed'
+        datasource = group.new_datasource()
+        datasource.name = args.get('datasourcename')
+        self.osscl.group.set(group)
+        return 'Group datasource was added successfully'
+
+    def group__member(self, **args):
+        if args.get('groupid'):
+            if not self.osscl.group.exists(int(args.get('groupid'))):
+                return 'Group with ID %s was not found.' % args.get('groupid')
+            group = self.osscl.group.get(int(args.get('orgid')))
+        elif args.get('group'):
+            group = self.osscl.group.simpleSearch({'group': args.get('group')})
+            if group:
+                group = self.osscl.group.get(group[0]['id'])
+            else:
+                return 'Group with name %s can not be found' % args.get('name')
+        else:
+            return 'Group ID or name must be passed'
+        user = args.get('user')
+        if user:
+            nativequery={'$or':[{'guid':user}, {'name':user}]}
+            parent = self.osscl.user.simpleSearch({}, nativequery=nativequery)
+            member = group.new_member()
+            if member:
+                member.name = member[0]['guid']
+                self.osscl.group.set(group)
+                return 'Group member was added successfully'
+            else:
+                return "User with this id/name not found"
+        else:
+            return 'User id/name must be passed'
+
+    def group__comment(self, **args):
+        if args.get('id'):
+            if not self.osscl.group.exists(int(args.get('id'))):
+                return 'Group with ID %s was not found.' % args.get('id')
+            group = self.osscl.group.get(int(args.get('id')))
+        elif args.get('name'):
+            group = self.osscl.group.simpleSearch({'name': args.get('name')})
+            if group:
+                group = self.osscl.group.get(group[0]['id'])
+            else:
+                return 'Group with name %s can not be found' % args.get('name')
+        else:
+            return 'Group ID or name must be passed'
+        comment = group.new_comment()
+        comment.comment = args.get('comment') if args.get('comment') else comment.comment
+        comment.time = args.get('created') if args.get('created') else comment.time
+        author = args.get('author')
+        nativequery={'$or':[{'guid':author}, {'name':author}]}
+        author = self.osscl.user.simpleSearch({}, nativequery=nativequery)
+        comment.author = author[0]['guid'] if author else comment.author
+        self.osscl.group.set(group)
+        return 'Group comment was added successfully'
 
     def group__list(self, **args):
         q = dict()
@@ -620,14 +971,12 @@ class OSSRobotCmds():
             project = self.osscl.project.get(int(args.get('id')))
         else:
             project = self.osscl.project.new()
-        project.name = args.get('name')
-        project.descr = args.get('description')
-        project.organizations = args.get('organizations')
-        project.deadline = args.get('deadline')
-        # TODO set data sources
+        project.name = args.get('name', project.name)
+        project.description = args.get('description', project.description)
+        project.deadline = args.get('deadline', project.deadline)
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            project.acl = tags.getDict()
+            project.acl = tags.getDict() if tags.getDict() else project.acl
         self.osscl.project.set(project)
         return 'Project was created/updated successfully'
 
@@ -663,6 +1012,51 @@ class OSSRobotCmds():
         self.osscl.project.set(project)
         return 'Project comment was added successfully'
 
+    def project__organization(self, **args):
+        if args.get('projectid'):
+            if not self.osscl.project.exists(int(args.get('projectid'))):
+                return 'Group with ID %s was not found.' % args.get('projectid')
+            project = self.osscl.project.get(int(args.get('orgid')))
+        elif args.get('project'):
+            project = self.osscl.project.simpleSearch({'project': args.get('project')})
+            if project:
+                project = self.osscl.project.get(project[0]['id'])
+            else:
+                return 'Group with name %s can not be found' % args.get('name')
+        else:
+            return 'Group ID or name must be passed'
+        organization = args.get('organization')
+        if organization:
+            nativequery={'$or':[{'guid':organization}, {'name':organization}]}
+            parent = self.osscl.organization.simpleSearch({}, nativequery=nativequery)
+            member = project.new_organization()
+            if member:
+                member.name = member[0]['guid']
+                self.osscl.project.set(project)
+                return 'Group member was added successfully'
+            else:
+                return "User with this id/name not found"
+        else:
+            return 'User id/name must be passed'
+
+    def project__datasource(self, **args):
+        if args.get('id'):
+            if not self.osscl.project.exists(int(args.get('id'))):
+                return 'Project with ID %s was not found.' % args.get('id')
+            project = self.osscl.project.get(int(args.get('id')))
+        elif args.get('name'):
+            project = self.osscl.project.simpleSearch({'name': args.get('name')})
+            if project:
+                project = self.osscl.project.get(project[0]['id'])
+            else:
+                return 'Project with name %s can not be found' % args.get('name')
+        else:
+            return 'Project ID or name must be passed'
+        datasource = project.new_datasource()
+        datasource.name = args.get('datasourcename') if args.get('datasourcename') else datasource.name
+        self.osscl.project.set(project)
+        return 'Project contactmethod was added successfully'
+
     def user__create(self, **args):
         user = self.osscl.user.new()
         userdata = user.dump()
@@ -670,12 +1064,108 @@ class OSSRobotCmds():
             if arg in userdata:
                 if arg == 'acl':
                     tags = j.core.tags.getObject(args.get('acl'))
-                    userdata['acl'] = tags.getDict()
+                    userdata['acl'] = tags.getDict() if tags.getDict() else userdata['acl']
                 else:
                     userdata[arg] = args.get(arg)
         user.dict2obj(userdata)
         self.osscl.user.set(user)
         return 'User was added successfully'
+
+    def user__datasource(self, **args):
+        if args.get('id'):
+            if not self.osscl.user.exists(int(args.get('id'))):
+                return 'User with ID %s was not found.' % args.get('id')
+            user = self.osscl.user.get(int(args.get('id')))
+        elif args.get('name'):
+            user = self.osscl.user.simpleSearch({'name': args.get('name')})
+            if user:
+                user = self.osscl.user.get(user[0]['id'])
+            else:
+                return 'User with name %s can not be found' % args.get('name')
+        else:
+            return 'User ID or name must be passed'
+        datasource = user.new_datasource()
+        datasource.name = args.get('datasourcename') if args.get('datasourcename') else datasource.name
+        self.osscl.user.set(user)
+        return 'User datasource was added successfully'
+
+    def user__address(self, **args):
+        if args.get('userid'):
+            if not self.osscl.user.exists(int(args.get('userid'))):
+                return 'User with ID %s was not found.' % args.get('userid')
+            user = self.osscl.user.get(int(args.get('userid')))
+        elif args.get('username'):
+            user = self.osscl.user.simpleSearch({'username': args.get('username')})
+            if user:
+                user = self.osscl.user.get(user[0]['id'])
+            else:
+                return 'User with name %s can not be found' % args.get('name')
+        else:
+            return 'User ID or name must be passed'
+        address = user.new_address()
+        address.country = args.get('country') if args.get('country') else address.country
+        address.city = args.get('city') if args.get('city') else address.city
+        address.citycode = args.get('citycode') if args.get('citycode') else address.citycode
+        address.zone = args.get('zone') if args.get('zone') else address.zone
+        address.region = args.get('region') if args.get('region') else address.region
+        address.street = args.get('street') if args.get('street') else address.street
+        address.nr = args.get('nr') if args.get('nr') else address.nr
+        self.osscl.user.set(user)
+        return 'User address was added successfully'
+
+    def user__contactmethod(self, **args):
+        if args.get('orgid'):
+            if not self.osscl.user.exists(int(args.get('orgid'))):
+                return 'User with ID %s was not found.' % args.get('orgid')
+            user = self.osscl.user.get(int(args.get('orgid')))
+        elif args.get('name'):
+            user = self.osscl.user.simpleSearch({'name': args.get('name')})
+            if user:
+                user = self.osscl.user.get(user[0]['id'])
+            else:
+                return 'User with name %s can not be found' % args.get('name')
+        else:
+            return 'User ID or name must be passed'
+        contactmethod = user.new_contactmethod()
+        contactmethod.type = args.get('type') if args.get('type') else contactmethod.type
+        contactmethod.value = args.get('value') if args.get('value') else contactmethod.value
+        self.osscl.user.set(user)
+        return 'User contactmethod was added successfully'
+
+    def user__list(self, **args):
+        q = dict()
+        if args.get('filter'):
+            q = json.loads(args.get('filter'))
+        start = int(args.get('start')) if args.get('start') else 0
+        size = int(args.get('max')) if args.get('max') else None
+        return self.osscl.user.simpleSearch(q, start, size)
+
+    def user__delete(self, **args):
+        self.osscl.user.delete(int(args.get('id')))
+        return 'User was deleted successfully'
+
+    def user__comment(self, **args):
+        if args.get('id'):
+            if not self.osscl.user.exists(int(args.get('id'))):
+                return 'User with ID %s was not found.' % args.get('id')
+            user = self.osscl.user.get(int(args.get('id')))
+        elif args.get('name'):
+            user = self.osscl.user.simpleSearch({'name': args.get('name')})
+            if user:
+                user = self.osscl.user.get(user[0]['id'])
+            else:
+                return 'User with name %s can not be found' % args.get('name')
+        else:
+            return 'User ID or name must be passed'
+        comment = user.new_comment()
+        comment.comment = args.get('comment') if args.get('comment') else comment.comment
+        comment.time = args.get('created') if args.get('created') else comment.time
+        author = args.get('author')
+        nativequery={'$or':[{'guid':author}, {'name':author}]}
+        author = self.osscl.user.simpleSearch({}, nativequery=nativequery)
+        comment.author = author[0]['guid'] if author else comment.author
+        self.osscl.user.set(user)
+        return 'User comment was added successfully'
 
     def ticket__create(self, **args):
         ticket = self.osscl.ticket.new()
@@ -684,7 +1174,7 @@ class OSSRobotCmds():
             if arg in ticketdata:
                 if arg == 'acl':
                     tags = j.core.tags.getObject(args.get('acl'))
-                    ticketdata['acl'] = tags.getDict()
+                    ticketdata['acl'] = tags.getDict() if tags.getDict() else ticketdata['acl']
                 else:
                     ticketdata[arg] = args.get(arg)
         ticket.dict2obj(ticketdata)
@@ -717,14 +1207,16 @@ class OSSRobotCmds():
         return 'Ticket was deleted successfully'
 
     def ticket__assign(self, **args):
-        assignee = args.get('who')
+        assignee = args.get('taskowner')
         ticket = self.osscl.ticket.get(int(args.get('id')))
+        if not ticket:
+            return 'No ticket with id "%s" was found' % args.get('id')
         ticket.taskowner = assignee
         self.osscl.ticket.set(ticket)
         return 'Ticket was updated successfully'
 
     def ticket__duplicate(self, **args):
-        tkt = self.osscl.ticket.new()
+        machine = self.osscl.ticket.new()
         id = args.get('id')
         query = {'id':id}
         if not id:
@@ -736,12 +1228,12 @@ class OSSRobotCmds():
             return 'Ticket not found'
         ticket = ticket[0]
         ticket['duplicate'].append(int(duplicate))
-        tkt.dict2obj(ticket)
+        machine.dict2obj(ticket)
         self.osscl.ticket.set(ticket)
         return 'Ticket was updated successfully'
 
     def ticket__depend(self, **args):
-        tkt = self.osscl.ticket.new()
+        machine = self.osscl.ticket.new()
         id = args.get('id')
         query = {'id':id}
         if not id:
@@ -753,12 +1245,12 @@ class OSSRobotCmds():
         ticket = ticket[0]
         depend = args.get('on')
         ticket['depends'].append(int(depend))
-        tkt.dict2obj(ticket)
+        machine.dict2obj(ticket)
         self.osscl.ticket.set(ticket)
         return 'Ticket was updated successfully'
 
     def ticket__subtask(self,**args):
-        tkt = self.osscl.ticket.new()
+        machine = self.osscl.ticket.new()
         id = args.get('id')
         query = {'id':id}
         if not id:
@@ -770,7 +1262,7 @@ class OSSRobotCmds():
         ticket = ticket[0]
         parent = args.get('parent')
         ticket['parent'] = int(parent)
-        tkt.dict2obj(ticket)
+        machine.dict2obj(ticket)
         self.osscl.ticket.set(ticket)
         return 'Ticket was updated successfully'
 
@@ -784,6 +1276,43 @@ class OSSRobotCmds():
         for k, v in ticket.iteritems():
             out += '%s: %s\n' % (k, v)
         return out
+
+    def ticket__comment(self, **args):
+        if args.get('id'):
+            if not self.osscl.ticket.exists(int(args.get('id'))):
+                return 'Ticket with ID %s was not found.' % args.get('id')
+            ticket = self.osscl.ticket.get(int(args.get('id')))
+        elif args.get('name'):
+            ticket = self.osscl.ticket.simpleSearch({'name': args.get('name')})
+            if ticket:
+                ticket = self.osscl.ticket.get(ticket[0]['id'])
+            else:
+                return 'Ticket with name %s can not be found' % args.get('name')
+        else:
+            return 'Ticket ID or name must be passed'
+        comment = ticket.new_comment()
+        comment.comment = args.get('comment')
+        comment.time = args.get('created')
+        comment.author = args.get('author')
+        self.osscl.ticket.set(ticket)
+        return 'Ticket comment was added successfully'
+
+    def ticket__message(self, **args):
+        if args.get('ticketid'):
+            if not self.osscl.ticket.exists(int(args.get('ticketid'))):
+                return 'Ticket with ID %s was not found.' % args.get('ticketid')
+            ticket = self.osscl.ticket.get(int(args.get('ticketid')))
+        else:
+            return 'Ticket ID must be passed'
+        if args.get('id') and self.osscl.message.exists(int(args.get('id'))):
+            message = self.osscl.message.get(int(args.get('id')))
+        else:
+            message = ticket.new_message()
+        message.message = args.get('message', message.message)
+        message.time = args.get('created', message.time)
+        message.author = args.get('author', message.author)
+        self.osscl.ticket.set(ticket)
+        return 'Ticket message was added successfully'
 
     def sprint__create(self, **args):
         if args.get('id'):
@@ -800,7 +1329,7 @@ class OSSRobotCmds():
         # TODO set data sources
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            sprint.acl = tags.getDict()
+            sprint.acl = tags.getDict() if tags.getDict() else sprint.acl
         self.osscl.sprint.set(sprint)
         return 'Sprint was created/updated successfully'
 
@@ -850,7 +1379,7 @@ class OSSRobotCmds():
         # TODO set data sources
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            datacenter.acl = tags.getDict()
+            datacenter.acl = tags.getDict() if tags.getDict() else datacenter.acl
         self.osscl.datacenter.set(datacenter)
         return 'Datacenter was created/updated successfully'
 
@@ -876,7 +1405,7 @@ class OSSRobotCmds():
         self.osscl.datacenter.set(datacenter)
         return 'Datacenter address was added successfully'
 
-    def datacenter__contact(self, **args):
+    def datacenter__contactmethod(self, **args):
         if args.get('id'):
             if not self.osscl.datacenter.exists(int(args.get('id'))):
                 return 'Datacenter with ID %s was not found.' % args.get('id')
@@ -889,11 +1418,11 @@ class OSSRobotCmds():
                 return 'Datacenter with name %s can not be found' % args.get('name')
         else:
             return 'Datacenter ID or name must be passed'
-        contact = datacenter.new_contact()
-        contact.type = args.get('type')
-        contact.value = args.get('value')
+        contactmethod = datacenter.new_contactmethod()
+        contactmethod.type = args.get('type')
+        contactmethod.value = args.get('value')
         self.osscl.datacenter.set(datacenter)
-        return 'Datacenter contact was added successfully'
+        return 'Datacenter contactmethod was added successfully'
 
     def datacenter__list(self, **args):
         q = dict()
@@ -942,7 +1471,7 @@ class OSSRobotCmds():
         # TODO set data sources
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            pod.acl = tags.getDict()
+            pod.acl = tags.getDict() if tags.getDict() else pod.acl
         self.osscl.pod.set(pod)
         return 'Pod was created/updated successfully'
 
@@ -994,7 +1523,7 @@ class OSSRobotCmds():
         # TODO set data sources
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            rack.acl = tags.getDict()
+            rack.acl = tags.getDict() if tags.getDict() else rack.acl
         self.osscl.rack.set(rack)
         return 'Rack was created/updated successfully'
 
@@ -1051,7 +1580,7 @@ class OSSRobotCmds():
         # TODO set data sources
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            asset.acl = tags.getDict()
+            asset.acl = tags.getDict() if if tags.getDict() else asset.acl
         self.osscl.asset.set(asset)
         return 'Asset was created/updated successfully'
 
@@ -1094,27 +1623,96 @@ class OSSRobotCmds():
             machine = self.osscl.machine.get(int(args.get('id')))
         else:
             machine = self.osscl.machine.new()
-        machine.name = args.get('name')
-        machine.description = args.get('description')
-        machine.label = args.get('label')
-        machine.memory = int(args.get('memory')) if args.get('memory') else 0
-        machine.ssdcapacity = int(args.get('ssdcapacity')) if args.get('ssdcapacity') else 0
-        machine.hdcapacity = int(args.get('hdcapacity')) if args.get('hdcapacity') else 0
-        machine.cpumhz = int(args.get('cpumhz')) if args.get('cpumhz') else 0
-        machine.nrcores = int(args.get('nrcores')) if args.get('nrcores') else 0
-        machine.nrcpu = int(args.get('nrcpu')) if args.get('nrcpu') else 0
-        machine.organization = args.get('organization')
-        machine.interfaces = args.get('interfaces')
-        machine.assethost = int(args.get('assethost')) if args.get('assethost') else 0
-        machine.parent = int(args.get('parent')) if args.get('parent') else 0
-        machine.type = args.get('type')
-        machine.depends = args.get('depends')
-        # TODO set data sources
+        machine.name = args.get('name') if args.get('name') else machine.name
+        machine.description = args.get('description') if args.get('description') else machine.description
+        machine.label = args.get('label') if args.get('label') else machine.label
+        machine.memory = int(args.get('memory')) if args.get('memory') else machine.memory
+        machine.ssdcapacity = int(args.get('ssdcapacity')) if args.get('ssdcapacity') else machine.ssdcapacity
+        machine.hdcapacity = int(args.get('hdcapacity')) if args.get('hdcapacity') else machine.hdcapacity
+        machine.cpumhz = int(args.get('cpumhz')) if args.get('cpumhz') else machine.cpumhz
+        machine.nrcores = int(args.get('nrcores')) if args.get('nrcores') else machine.nrcores
+        machine.nrcpu = int(args.get('nrcpu')) if args.get('nrcpu') else machine.nrcpu
+        machine.organization = args.get('organization') if args.get('organization') else machine.organization
+        machine.assethost = int(args.get('assethost')) if args.get('assethost') else machine.assethost
+        machine.parent = int(args.get('parent')) if args.get('parent') else machine.parent
+        machine.type = args.get('type') if args.get('type') else machine.type
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            machine.acl = tags.getDict()
+            machine.acl = tags.getDict() if tags.getDict() else machine.acl
         self.osscl.machine.set(machine)
         return 'Machine was created/updated successfully'
+
+    def machine__interface(self, **args):
+        if args.get('id'):
+            if not self.osscl.machine.exists(int(args.get('id'))):
+                return 'Machine with ID %s was not found.' % args.get('id')
+            machine = self.osscl.machine.get(int(args.get('id')))
+        elif args.get('name'):
+            machine = self.osscl.machine.simpleSearch({'name': args.get('name')})
+            if machine:
+                machine = self.osscl.machine.get(machine[0]['id'])
+            else:
+                return 'Machine with name %s can not be found' % args.get('name')
+        else:
+            return 'Machine ID or name must be passed'
+        interfaceid = args.get('interface')
+        if interfaceid:
+            nativequery={'$or':[{'id':interfaceid}, {'name':interfaceid}]}
+            interface = self.osscl.interface.simpleSearch({}, nativequery=nativequery)
+            if interface:
+                member = machine.new_interface()
+                member.type = member[0]['type']
+                member.macaddr = member[0]['macaddr']
+                member.vlanid = member[0]['vlanid']
+                member.organization = member[0]['organization']
+                member.netaddr = member[0]['netaddr']
+                member.connects = member[0]['connects']
+                member.brand = member[0]['brand']
+                member.model = member[0]['model']
+                member.description = member[0]['description']
+                member.supportremarks = member[0]['supportremarks']
+                member.comments = member[0]['comments']
+                self.osscl.machine.set(group)
+                return 'Machine interface was added successfully'
+            else:
+                return "Interface with this id/name not found"
+        else:
+            return 'Interface id/name must be passed'
+
+    def machine__datasource(self, **args):
+        if args.get('id'):
+            if not self.osscl.machine.exists(int(args.get('id'))):
+                return 'Machine with ID %s was not found.' % args.get('id')
+            machine = self.osscl.machine.get(int(args.get('id')))
+        elif args.get('name'):
+            machine = self.osscl.machine.simpleSearch({'name': args.get('name')})
+            if machine:
+                machine = self.osscl.machine.get(machine[0]['id'])
+            else:
+                return 'Machine with name %s can not be found' % args.get('name')
+        else:
+            return 'Machine ID or name must be passed'
+        datasource = machine.new_datasource()
+        datasource.name = args.get('datasourcename') if args.get('datasourcename') else datasource.name
+        self.osscl.machine.set(machine)
+        return 'Machine datasource was added successfully'
+
+    def machine__depend(self, **args):
+        machine = self.osscl.machine.new()
+        id = args.get('id')
+        query = {'id':id}
+        if not id:
+            name = args.get('name')
+            query = {'name': '*%s*' % name}
+        machine = self.osscl.machine.simpleSearch({}, partials=query)
+        if not machine:
+            return 'Machine not found'
+        machine = machine[0]
+        depend = args.get('on')
+        machine['depends'].append(int(depend))
+        machine.dict2obj(machine)
+        self.osscl.machine.set(machine)
+        return 'Machine was updated successfully'
 
     def machine__list(self, **args):
         q = dict()
@@ -1147,3 +1745,382 @@ class OSSRobotCmds():
         comment.author = args.get('author')
         self.osscl.machine.set(machine)
         return 'Machine comment was added successfully'
+
+    def service__create(self, **args):
+        if args.get('id'):
+            if not self.osscl.service.exists(int(args.get('id'))):
+                return 'Service with ID %s was not found.' % args.get('id')
+            service = self.osscl.service.get(int(args.get('id')))
+        else:
+            service = self.osscl.service.new()
+        service.name = args.get('name') if args.get('name') else service.name
+        service.description = args.get('description') if args.get('description') else service.description
+        service.label = args.get('label') if args.get('label') else service.label
+        service.memory = int(args.get('memory')) if args.get('memory') else service.memory
+        service.ssdcapacity = int(args.get('ssdcapacity')) if args.get('ssdcapacity') else service.ssdcapacity
+        service.hdcapacity = int(args.get('hdcapacity')) if args.get('hdcapacity') else service.hdcapacity
+        service.cpumhz = int(args.get('cpumhz')) if args.get('cpumhz') else service.cpumhz
+        service.nrcores = int(args.get('nrcores')) if args.get('nrcores') else service.nrcores
+        service.nrcpu = int(args.get('nrcpu')) if args.get('nrcpu') else service.nrcpu
+        service.organization = args.get('organization') if args.get('organization') else service.organization
+        service.assethost = int(args.get('machinehost')) if args.get('assethost') else service.machinehost
+        service.parent = int(args.get('parent')) if args.get('parent') else service.parent
+        service.admin_name = args.get('admin_name', service.admin_name)
+        service.admin_passwd = args.get('admin_passwd', service.admin_passwd)
+        service.type = args.get('type') if args.get('type') else service.type
+        if args.get('acl'):
+            tags = j.core.tags.getObject(args.get('acl'))
+            service.acl = tags.getDict() if tags.getDict() else service.acl
+        self.osscl.service.set(service)
+        return 'Service was created/updated successfully'
+
+    def service__serviceport(self, **args):
+        if args.get('id'):
+            if not self.osscl.service.exists(int(args.get('id'))):
+                return 'Service with ID %s was not found.' % args.get('id')
+            service = self.osscl.service.get(int(args.get('id')))
+        elif args.get('name'):
+            service = self.osscl.service.simpleSearch({'name': args.get('name')})
+            if service:
+                service = self.osscl.service.get(service[0]['id'])
+            else:
+                return 'Service with name %s can not be found' % args.get('name')
+        else:
+            return 'Service ID or name must be passed'
+        serviceportid = args.get('serviceport')
+        if serviceportid:
+            nativequery={'$or':[{'id':serviceportid}, {'name':serviceportid}]}
+            serviceport = self.osscl.serviceport.simpleSearch({}, nativequery=nativequery)
+            if serviceport:
+                member = service.new_serviceport()
+                member.id = member[0]['id']
+                member.ipaddr = member[0]['ipaddr']
+                member.ipaddr6 = member[0]['ipaddr6']
+                member.url = member[0]['url']
+                member.port = member[0]['port']
+                member.type = member[0]['type']
+                member.description = member[0]['description']
+                member.supportremarks = member[0]['supportremarks']
+                member.comments = member[0]['comments']
+                self.osscl.service.set(group)
+                return 'Service serviceport was added successfully'
+            else:
+                return "serviceport with this id/name not found"
+        else:
+            return 'serviceport id/name must be passed'
+
+    def service__datasource(self, **args):
+        if args.get('id'):
+            if not self.osscl.service.exists(int(args.get('id'))):
+                return 'Service with ID %s was not found.' % args.get('id')
+            service = self.osscl.service.get(int(args.get('id')))
+        elif args.get('name'):
+            service = self.osscl.service.simpleSearch({'name': args.get('name')})
+            if service:
+                service = self.osscl.service.get(service[0]['id'])
+            else:
+                return 'Service with name %s can not be found' % args.get('name')
+        else:
+            return 'Service ID or name must be passed'
+        datasource = service.new_datasource()
+        datasource.name = args.get('datasourcename') if args.get('datasourcename') else datasource.name
+        self.osscl.service.set(service)
+        return 'Service datasource was added successfully'
+
+    def service__depend(self, **args):
+        service = self.osscl.service.new()
+        id = args.get('id')
+        query = {'id':id}
+        if not id:
+            name = args.get('name')
+            query = {'name': '*%s*' % name}
+        service = self.osscl.service.simpleSearch({}, partials=query)
+        if not service:
+            return 'Service not found'
+        service = service[0]
+        depend = args.get('on')
+        service['depends'].append(int(depend))
+        service.dict2obj(service)
+        self.osscl.service.set(service)
+        return 'Service was updated successfully'
+
+    def service__list(self, **args):
+        q = dict()
+        if args.get('filter'):
+            q = json.loads(args.get('filter'))
+        start = int(args.get('start')) if args.get('start') else 0
+        size = int(args.get('max')) if args.get('max') else None
+        return self.osscl.service.simpleSearch(q, start, size)
+
+    def service__delete(self, **args):
+        self.osscl.service.delete(int(args.get('id')))
+        return 'Service was deleted successfully'
+
+    def service__comment(self, **args):
+        if args.get('id'):
+            if not self.osscl.service.exists(int(args.get('id'))):
+                return 'Service with ID %s was not found.' % args.get('id')
+            service = self.osscl.service.get(int(args.get('id')))
+        elif args.get('name'):
+            service = self.osscl.service.simpleSearch({'name': args.get('name')})
+            if service:
+                service = self.osscl.service.get(service[0]['id'])
+            else:
+                return 'Service with name %s can not be found' % args.get('name')
+        else:
+            return 'Service ID or name must be passed'
+        comment = service.new_comment()
+        comment.comment = args.get('comment')
+        comment.time = args.get('created')
+        comment.author = args.get('author')
+        self.osscl.service.set(service)
+        return 'Service comment was added successfully'
+
+    def document__create(self, **args):
+        if args.get('id'):
+            if not self.osscl.document.exists(int(args.get('id'))):
+                return 'Document with ID %s was not found.' % args.get('id')
+            document = self.osscl.document.get(int(args.get('id')))
+        else:
+            document = self.osscl.document.new()
+        documentdata = document.dump()
+        for arg in args:
+            if arg in documentdata:
+                if arg == 'acl':
+                    tags = j.core.tags.getObject(args.get('acl'))
+                    documentdata['acl'] = tags.getDict() if tags.getDict() else documentdata['acl']
+                elif arg == 'parent':
+                    parent = args.get('parent')
+                    nativequery={'$or':[{'id':parent}, {'name':parent}]}
+                    parent = self.osscl.document.simpleSearch({}, nativequery=nativequery)
+                    document.parent = parent[0]['id'] if parent else document.parent
+                else:
+                    documentdata[arg] = args.get(arg)
+        document.dict2obj(documentdata)
+        self.osscl.document.set(document)
+        return 'Document was created/updated successfully'
+
+    def document__list(self, **args):
+        q = dict()
+        if args.get('filter'):
+            q = json.loads(args.get('filter'))
+        start = int(args.get('start')) if args.get('start') else 0
+        size = int(args.get('max')) if args.get('max') else None
+        return self.osscl.document.simpleSearch(q, start, size)
+
+    def document__delete(self, **args):
+        self.osscl.document.delete(int(args.get('id')))
+        return 'Document was deleted successfully'
+
+    def document__comment(self, **args):
+        if args.get('id'):
+            if not self.osscl.document.exists(int(args.get('id'))):
+                return 'Document with ID %s was not found.' % args.get('id')
+            document = self.osscl.document.get(int(args.get('id')))
+        elif args.get('name'):
+            document = self.osscl.document.simpleSearch({'name': args.get('name')})
+            if document:
+                document = self.osscl.document.get(document[0]['id'])
+            else:
+                return 'Document with name %s can not be found' % args.get('name')
+        else:
+            return 'Document ID or name must be passed'
+        comment = document.new_comment()
+        comment.comment = args.get('comment')
+        comment.time = args.get('created')
+        comment.author = args.get('author')
+        self.osscl.document.set(document)
+        return 'Document comment was added successfully'
+
+    def workflow__create(self, **args):
+        if args.get('id'):
+            if not self.osscl.workflow.exists(int(args.get('id'))):
+                return 'Workflow with ID %s was not found.' % args.get('id')
+            workflow = self.osscl.workflow.get(int(args.get('id')))
+        else:
+            workflow = self.osscl.workflow.new()
+        workflowdata = workflow.dump()
+        for arg in args:
+            if arg in workflowdata:
+                if arg == 'acl':
+                    tags = j.core.tags.getObject(args.get('acl'))
+                    workflowdata['acl'] = tags.getDict() if tags.getDict() else workflowdata['acl']
+                elif arg == 'firststep':
+                    firststep = args.get('firststep')
+                    nativequery={'$or':[{'id':firststep}, {'name':firststep}]}
+                    firststep = self.osscl.workflowstep.simpleSearch({}, nativequery=nativequery)
+                    workflow.firststep = firststep[0]['id'] if firststep else workflow.firststep
+                else:
+                    workflowdata[arg] = args.get(arg)
+        workflow.dict2obj(workflowdata)
+        self.osscl.workflow.set(workflow)
+        return 'Workflow was created/updated successfully'
+
+    def workflow__list(self, **args):
+        q = dict()
+        if args.get('filter'):
+            q = json.loads(args.get('filter'))
+        start = int(args.get('start')) if args.get('start') else 0
+        size = int(args.get('max')) if args.get('max') else None
+        return self.osscl.workflow.simpleSearch(q, start, size)
+
+    def workflow__delete(self, **args):
+        self.osscl.workflow.delete(int(args.get('id')))
+        return 'Workflow was deleted successfully'
+
+    def workflow__comment(self, **args):
+        if args.get('id'):
+            if not self.osscl.workflow.exists(int(args.get('id'))):
+                return 'Workflow with ID %s was not found.' % args.get('id')
+            workflow = self.osscl.workflow.get(int(args.get('id')))
+        elif args.get('name'):
+            workflow = self.osscl.workflow.simpleSearch({'name': args.get('name')})
+            if workflow:
+                workflow = self.osscl.workflow.get(workflow[0]['id'])
+            else:
+                return 'Workflow with name %s can not be found' % args.get('name')
+        else:
+            return 'Workflow ID or name must be passed'
+        comment = workflow.new_comment()
+        comment.comment = args.get('comment')
+        comment.time = args.get('created')
+        comment.author = args.get('author')
+        self.osscl.workflow.set(workflow)
+        return 'Workflow comment was added successfully'
+
+    def workflowstep__create(self, **args):
+        if args.get('id'):
+            if not self.osscl.workflowstep.exists(int(args.get('id'))):
+                return 'Workflow with ID %s was not found.' % args.get('id')
+            workflowstep = self.osscl.workflowstep.get(int(args.get('id')))
+        else:
+            workflowstep = self.osscl.workflowstep.new()
+        workflowstepdata = workflowstep.dump()
+        for arg in args:
+            if arg in workflowstepdata:
+                if arg == 'acl':
+                    tags = j.core.tags.getObject(args.get('acl'))
+                    workflowstepdata['acl'] = tags.getDict() if tags.getDict() else workflowstepdata['acl']
+                else:
+                    workflowstepdata[arg] = args.get(arg)
+        workflowstep.dict2obj(workflowstepdata)
+        self.osscl.workflowstep.set(workflowstep)
+        return 'Workflow was created/updated successfully'
+
+    def workflowstep__list(self, **args):
+        q = dict()
+        if args.get('filter'):
+            q = json.loads(args.get('filter'))
+        start = int(args.get('start')) if args.get('start') else 0
+        size = int(args.get('max')) if args.get('max') else None
+        return self.osscl.workflowstep.simpleSearch(q, start, size)
+
+    def workflowstep__delete(self, **args):
+        self.osscl.workflowstep.delete(int(args.get('id')))
+        return 'Workflow was deleted successfully'
+
+    def workflowstep__comment(self, **args):
+        if args.get('id'):
+            if not self.osscl.workflowstep.exists(int(args.get('id'))):
+                return 'Workflow with ID %s was not found.' % args.get('id')
+            workflowstep = self.osscl.workflowstep.get(int(args.get('id')))
+        elif args.get('name'):
+            workflowstep = self.osscl.workflowstep.simpleSearch({'name': args.get('name')})
+            if workflowstep:
+                workflowstep = self.osscl.workflowstep.get(workflowstep[0]['id'])
+            else:
+                return 'Workflow with name %s can not be found' % args.get('name')
+        else:
+            return 'Workflow ID or name must be passed'
+        comment = workflowstep.new_comment()
+        comment.comment = args.get('comment')
+        comment.time = args.get('created')
+        comment.author = args.get('author')
+        self.osscl.workflowstep.set(workflowstep)
+        return 'Workflow comment was added successfully'
+
+    def job__create(self, **args):
+        if args.get('id'):
+            if not self.osscl.job.exists(int(args.get('id'))):
+                return 'Job with ID %s was not found.' % args.get('id')
+            job = self.osscl.job.get(int(args.get('id')))
+        else:
+            job = self.osscl.job.new()
+        jobdata = job.dump()
+        for arg in args:
+            if arg in jobdata:
+                if arg == 'workflow':
+                    workflow = args.get('workflow')
+                    nativequery={'$or':[{'id':workflow}, {'name':workflow}]}
+                    workflow = self.osscl.jobstep.simpleSearch({}, nativequery=nativequery)
+                    job.workflow = workflow[0]['id'] if workflow else job.workflow
+                else:
+                    jobdata[arg] = args.get(arg)
+        job.dict2obj(jobdata)
+        self.osscl.job.set(job)
+        return 'Job was created/updated successfully'
+
+    def job__list(self, **args):
+        q = dict()
+        if args.get('filter'):
+            q = json.loads(args.get('filter'))
+        start = int(args.get('start')) if args.get('start') else 0
+        size = int(args.get('max')) if args.get('max') else None
+        return self.osscl.job.simpleSearch(q, start, size)
+
+    def job__delete(self, **args):
+        self.osscl.job.delete(int(args.get('id')))
+        return 'Job was deleted successfully'
+
+    def jobstep__create(self, **args):
+        if args.get('id'):
+            if not self.osscl.jobstep.exists(int(args.get('id'))):
+                return 'Jobstep with ID %s was not found.' % args.get('id')
+            jobstep = self.osscl.jobstep.get(int(args.get('id')))
+        else:
+            jobstep = self.osscl.jobstep.new()
+        jobstepdata = jobstep.dump()
+        for arg in args:
+            if arg in jobstepdata:
+                if arg == 'workflowstep':
+                    workflowstep = args.get('workflowstep')
+                    nativequery={'$or':[{'id':workflowstep}, {'name':workflowstep}]}
+                    workflowstep = self.osscl.workflowstep.simpleSearch({}, nativequery=nativequery)
+                    jobstep.workflowstep_id = workflowstep[0]['id'] if workflowstep else jobstep.workflowstep
+                else:
+                    jobstepdata[arg] = args.get(arg)
+        jobstep.dict2obj(jobstepdata)
+        self.osscl.jobstep.set(jobstep)
+        return 'Jobstep was created/updated successfully'
+
+    def jobstep__list(self, **args):
+        q = dict()
+        if args.get('filter'):
+            q = json.loads(args.get('filter'))
+        start = int(args.get('start')) if args.get('start') else 0
+        size = int(args.get('max')) if args.get('max') else None
+        return self.osscl.jobstep.simpleSearch(q, start, size)
+
+    def jobstep__delete(self, **args):
+        self.osscl.jobstep.delete(int(args.get('id')))
+        return 'Jobstep was deleted successfully'
+
+    def jobstep__comment(self, **args):
+        if args.get('id'):
+            if not self.osscl.jobstep.exists(int(args.get('id'))):
+                return 'Jobstep with ID %s was not found.' % args.get('id')
+            jobstep = self.osscl.jobstep.get(int(args.get('id')))
+        elif args.get('name'):
+            jobstep = self.osscl.jobstep.simpleSearch({'name': args.get('name')})
+            if jobstep:
+                jobstep = self.osscl.jobstep.get(jobstep[0]['id'])
+            else:
+                return 'Jobstep with name %s can not be found' % args.get('name')
+        else:
+            return 'Jobstep ID or name must be passed'
+        comment = jobstep.new_comment()
+        comment.comment = args.get('comment')
+        comment.time = args.get('created')
+        comment.author = args.get('author')
+        self.osscl.jobstep.set(jobstep)
+        return 'Jobstep comment was added successfully'

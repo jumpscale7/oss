@@ -1,3 +1,7 @@
+#every object has a guid
+#because we are using mongodb best not to make nested structures
+#every object also has an id = int they are both unique
+
 [rootmodel:organization] @index
     """
     organization is e.g. a company or department in company
@@ -5,41 +9,57 @@
     prop:name str,,domain
     prop:id int,,
     prop:description str,,
-    prop:companyname str,,optional name for e.g. a com
+    prop:companyname str,,optional name 
     prop:parent int,,organization can belong to other organization
     prop:parent_name str,,
-    prop:addresses list(address),,
-    prop:contacts list(contact),,
+    prop:addresses list(str),,reference to addresses (guid)
+    prop:contactmethods list(str),,reference to contactmethod (guid)
     prop:vatnr str,,
-    prop:datasources list(datasource),,source(s) where data comes from
+    prop:datasources list(int),,source(s) where data comes from (reference)
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
-[model:address]
+[rootmodel:address]
     prop:id int,,
     prop:country str,,
     prop:city str,,
     prop:citycode str,,
+    prop:zone str,,
+    prop:region str,,
     prop:street str,,
     prop:nr int,,
+    prop:floor int,,
 
-[model:contact]
+[rootmodel:contactmethod]
     prop:id int,,
-    prop:type str,, {phone;mobile;email;skype}
+    prop:type str,, phone;mobile;email;skype;linkedin;facebook;jabber
     prop:value str,,e.g. tel nr
 
 [rootmodel:user] @index
     """
     users
     """
-    prop:id int,,    
-    prop:organization str,,
-    prop:name str,,
-    prop:addresses list(address),,
-    prop:comments list(comment),,
-    prop:contacts list(contact),,
-    prop:datasources list(datasource),,source(s) where data comes from
+    prop:id int,,
+    prop:organization int,,
+    prop:organization_name str,,
+    prop:name str,,    
+    prop:addresses list(str),,reference to addr (guid)
+    prop:comments list(str),,reference to comment (guid)
+    prop:contactmethods list(str),,reference to contactmethod
+    prop:datasources list(int),,source(s) where data comes from (reference)
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
+
+[rootmodel:useridentification] @index
+    """
+    usersid e.g. passport
+    """
+    prop:userid int,, reference to user
+    prop:type str,, PASSPORT:ID:DRIVINGLICENSE
+    prop:identificationnr str,,e.g. passport nr
+    prop:registrationdate int,, epoch
+    prop:expirationdate int,, epoch
+    prop:description str,,    
+    prop:status str,,VALID:EXPIRED:ERROR
 
 [rootmodel:group] @index
     """
@@ -47,11 +67,12 @@
     """
     prop:id int,,    
     prop:name str,,
+    prop:addresses list(str),,reference to addr
     prop:members list(int),,users in group (based on ids)
     prop:members_name list(str),,
-    prop:comments list(comment),,
-    prop:contacts list(contact),,
-    prop:datasources list(datasource),,source(s) where data comes from
+    prop:comments list(str),,reference to comments (guid)
+    prop:contactmethods list(str),,reference to contactmethod(guid)
+    prop:datasources list(int),,source(s) where data comes from (reference)
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
 
 [rootmodel:ticket] @index
@@ -88,13 +109,13 @@
     prop:time_lastmessage int,,
     prop:time_lastresponse int,,
     prop:time_closed int,,
-    prop:messages list(message),, 
-    prop:comments list(comment),,
-    prop:datasources list(datasource),,source(s) where data comes from
+    prop:messages list(str),, reference to message
+    prop:comments list(str),,reference to comments
+    prop:datasources list(int),,source(s) where data comes from (reference)
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
     prop:params str,,json representation of dict which has all arguments required for this ticket
 
-[model:comment]
+[rootmodel:comment]
     """
     """
     prop:comment str,,
@@ -105,12 +126,12 @@
 [rootmodel:message] @index
     """
     """
-    prop:id int,,    
     prop:subject str,,
     prop:message str,,
     prop:destination list(str),,
     prop:time int,,epoch
     prop:type str,,types are: email;sms;gtalk;tel
+    prop:format str,, html;confl;md;text default is text
     prop:ticket int,,
 
 [model:datasource]
@@ -118,7 +139,6 @@
     """
     prop:name str,,
     prop:id int,,
-
 
 [rootmodel:workflow] @index
     """
@@ -128,46 +148,51 @@
     prop:name str,,
     prop:tickettype str,,supported types:story;task;issue;event;bug;feature;ticket;perfissue,check (if empty then all)
     prop:description str,,
-    prop:steps list(workflow_step),,
+    prop:firststep int,,reference to first workflowstep to start with
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
 
-[model:workflow_step]
+[rootmodel:workflowstep]
     """
     project
     """
+    prop:id int,,
     prop:name str,,
     prop:description str,,
     prop:warningtime int,, time that this step can take till warning (in sec)
     prop:criticaltime int,, time that this step can take
-    prop:nextsteps list(str),,
-    prop:nextsteps_error list(str),,
-    prop:jscript str,,
+    prop:nextsteps dict(int),,
+    prop:nextsteps_error dict(int),,
+    prop:jscript str,,this script will create jobsteps (like branches of a tree) and return all next jobsteps to execute
 
 [rootmodel:job] @index
     """
     project
     """
     prop:id int,,  
-    prop:name str,,  
-    prop:startdate int,,
-    prop:enddate int,,
+    prop:workflow int,,
+    prop:workflow_name str,,  
+    prop:startdate int,,epoch
+    prop:enddate int,,epoch
     prop:status str,,values are: PENDING,ACTIVE,ERROR,OK,WARNING,CRITICAL
-    prop:steps list(workflow_step),,
-    prop:steps list(job_step),,    
-    prop:jobid int,,
     
-[model:job_step]
+[rootmodel:jobstep]
     """
     project
     """
-    prop:name str,,
+    prop:jobguid str,,reference to job
+    prop:workflowstep_id int,,reference to workflowstep which started this jobstep
+    prop:workflowstep_name str,,
+    prop:description str,,
+    prop:order int,,order in which the steps where executed
     prop:params str,,json representation of dict which has all arguments    
     prop:warningtime int,, time that this step can take till warning (in sec)
     prop:criticaltime int,, time that this step can take
     prop:startdate int,,
     prop:enddate int,,
+    prop:jscript str,,script which was executed
     prop:status str,,values are: PENDING,ACTIVE,ERROR,OK,WARNING,CRITICAL
-    prop:nextstep str,,
+    prop:nextsteps list(str),,after resolving the script next steps which were triggered (so is after execution), is references to other jobsteps (guid)
+    prop:comments str,,
     prop:logs str,,
 
 [rootmodel:project] @index
@@ -181,7 +206,7 @@
     prop:organizations_names str,,comma separated list of names of orgs
     prop:deadline int,,epoch of when task needs to be done
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [rootmodel:sprint] @index
     """
@@ -194,7 +219,7 @@
     prop:organizations list(int),,organizations involved with this sprint
     prop:organizations_names str,,comma separated list of names of orgs
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [rootmodel:datacenter] @index
     """
@@ -205,9 +230,9 @@
     prop:organization int,,id of organization which owns dc
     prop:organization_name str,,
     prop:description str,,
-    prop:addresses list(address),,
+    prop:addresses list(str),,reference to addr
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [rootmodel:pod] @index
     """
@@ -222,7 +247,7 @@
     prop:datacenter_name str,,
     prop:description str,,
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [rootmodel:rack] @index
     """
@@ -238,7 +263,7 @@
     prop:organization_name str,,
     prop:description str,,
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [rootmodel:machine] @index
     """
@@ -262,8 +287,52 @@
     prop:cpumhz int,,in mhz
     prop:nrcores int,,
     prop:nrcpu int,,
+    prop:rootpasswd str,,encrypted root passwd
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
+
+[rootmodel:service] @index
+    """
+    """
+    prop:id int,,
+    prop:name str,,
+    prop:organization int,,id of organization which owns the service if any
+    prop:organization_name str,,
+    prop:label str,,
+    prop:parent int,,
+    prop:parent_name str,,
+    prop:description str,,
+    prop:type str,,
+    prop:serviceports list(serviceport),,
+    prop:depends list(int),, link to other services (what does it need to work)
+    prop:depends_names list(str),,
+    prop:machinehost int,,who is machine hosting this service
+    prop:memory int,,in GB
+    prop:ssdcapacity int,,in GB
+    prop:hdcapacity int,,in GB
+    prop:cpumhz int,,in mhz
+    prop:nrcores int,,
+    prop:nrcpu int,,
+    prop:admin_name str,,name of admin e.g. admin or root
+    prop:admin_passwd str,,encrypted root passwd
+    prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
+    prop:comments list(str),,reference to comments
+
+[rootmodel:serviceport] @index
+    """
+    there is many2many relation between services and service ports
+    """
+    prop:id int,,
+    prop:serviceid int,,
+    prop:ipaddr str,, e.g. 192.168.10.1/24
+    prop:ipaddr6 str,, 
+    prop:url str,,
+    prop:port str,,
+    prop:type str,,UDP:TCP:HTTP:HTTPS:SSH
+    prop:description str,,
+    prop:supportremarks str,,
+    prop:comments list(str),,reference to comments
+
 
 [rootmodel:asset] @index
     """
@@ -292,7 +361,7 @@
     prop:U int,,how many U taken
     prop:rackpos int,, how many U starting from bottomn
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [model:component] @index
     """
@@ -303,7 +372,7 @@
     prop:model str,,
     prop:description str,,
     prop:supportremarks str,,
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [rootmodel:interface] @index
     """
@@ -319,7 +388,7 @@
     prop:model str,,
     prop:description str,,
     prop:supportremarks str,,
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [rootmodel:netaddr] @index
     """
@@ -329,7 +398,7 @@
     prop:ipaddr6 str,, 
     prop:description str,,
     prop:supportremarks str,,
-    prop:comments list(comment),,
+    prop:comments list(str),,reference to comments
 
 [rootmodel:componenttype] @index
     """
@@ -362,6 +431,20 @@
     prop:description str,,
     prop:supportremarks str,,
 
-    
+[rootmodel:document] @index
+    """
+    """
+    prop:id int,,
+    prop:parent int,,parent doc (where this document is a version of)
+    prop:name str,,
+    prop:creationdate int,,
+    prop:moddate int,,
+    prop:type str,, SPREADSHEET:DOC:TXT:CODE:...
+    prop:ext str,, e.g. docx;xls;...
+    prop:contents str,,full text content
+    prop:objstorid str,,reference on doc mgmt system (stored in sort of key value obj store)
+    prop:description str,,
+    prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
+    prop:comments list(str),,reference to comments
 
-    
+

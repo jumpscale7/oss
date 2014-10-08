@@ -248,31 +248,3 @@ class oss_datacenter_osismodelbase(j.code.classGetJSRootModelBase()):
     def _meta(self):
         del self._P__meta
 
-
-    def new_addresse(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","address")()
-        else:
-            value2=value
-        
-        self._P_addresses.append(value2)
-        if self._P_addresses[-1].__dict__.has_key("_P_id"):
-            self._P_addresses[-1].id=len(self._P_addresses)
-        return self._P_addresses[-1]
-        
-    
-
-    def new_comment(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","comment")()
-        else:
-            value2=value
-        
-        self._P_comments.append(value2)
-        if self._P_comments[-1].__dict__.has_key("_P_id"):
-            self._P_comments[-1].id=len(self._P_comments)
-        return self._P_comments[-1]
-        
-    

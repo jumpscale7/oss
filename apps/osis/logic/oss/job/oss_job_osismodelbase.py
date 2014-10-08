@@ -8,19 +8,15 @@ class oss_job_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
         self._P_id=0
     
-        self._P_name=""
+        self._P_workflow=0
+    
+        self._P_workflow_name=""
     
         self._P_startdate=0
     
         self._P_enddate=0
     
         self._P_status=""
-    
-        self._P_steps=list()
-    
-        self._P_steps=list()
-    
-        self._P_jobid=0
     
         self._P_guid=""
     
@@ -52,23 +48,43 @@ class oss_job_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def name(self):
-        return self._P_name
-    @name.setter
-    def name(self, value):
+    def workflow(self):
+        return self._P_workflow
+    @workflow.setter
+    def workflow(self, value):
+        
+        if not isinstance(value, int) and value is not None:
+            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
+                value = j.basetype.integer.fromString(value)
+            else:
+                msg="property workflow input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: job, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_workflow=value
+    @workflow.deleter
+    def workflow(self):
+        del self._P_workflow
+
+
+    @property
+    def workflow_name(self):
+        return self._P_workflow_name
+    @workflow_name.setter
+    def workflow_name(self, value):
         
         if not isinstance(value, str) and value is not None:
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: job, value was:" + str(value)
+                msg="property workflow_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: job, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_name=value
-    @name.deleter
-    def name(self):
-        del self._P_name
+        self._P_workflow_name=value
+    @workflow_name.deleter
+    def workflow_name(self):
+        del self._P_workflow_name
 
 
     @property
@@ -132,66 +148,6 @@ class oss_job_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def steps(self):
-        return self._P_steps
-    @steps.setter
-    def steps(self, value):
-        
-        if not isinstance(value, list) and value is not None:
-            if isinstance(value, basestring) and j.basetype.list.checkString(value):
-                value = j.basetype.list.fromString(value)
-            else:
-                msg="property steps input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: job, value was:" + str(value)
-                raise RuntimeError(msg)
-    
-
-        self._P_steps=value
-    @steps.deleter
-    def steps(self):
-        del self._P_steps
-
-
-    @property
-    def steps(self):
-        return self._P_steps
-    @steps.setter
-    def steps(self, value):
-        
-        if not isinstance(value, list) and value is not None:
-            if isinstance(value, basestring) and j.basetype.list.checkString(value):
-                value = j.basetype.list.fromString(value)
-            else:
-                msg="property steps input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: job, value was:" + str(value)
-                raise RuntimeError(msg)
-    
-
-        self._P_steps=value
-    @steps.deleter
-    def steps(self):
-        del self._P_steps
-
-
-    @property
-    def jobid(self):
-        return self._P_jobid
-    @jobid.setter
-    def jobid(self, value):
-        
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
-            else:
-                msg="property jobid input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: job, value was:" + str(value)
-                raise RuntimeError(msg)
-    
-
-        self._P_jobid=value
-    @jobid.deleter
-    def jobid(self):
-        del self._P_jobid
-
-
-    @property
     def guid(self):
         return self._P_guid
     @guid.setter
@@ -230,31 +186,3 @@ class oss_job_osismodelbase(j.code.classGetJSRootModelBase()):
     def _meta(self):
         del self._P__meta
 
-
-    def new_step(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","workflow_step")()
-        else:
-            value2=value
-        
-        self._P_steps.append(value2)
-        if self._P_steps[-1].__dict__.has_key("_P_id"):
-            self._P_steps[-1].id=len(self._P_steps)
-        return self._P_steps[-1]
-        
-    
-
-    def new_step(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","job_step")()
-        else:
-            value2=value
-        
-        self._P_steps.append(value2)
-        if self._P_steps[-1].__dict__.has_key("_P_id"):
-            self._P_steps[-1].id=len(self._P_steps)
-        return self._P_steps[-1]
-        
-    
