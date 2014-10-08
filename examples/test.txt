@@ -1,0 +1,6 @@
+!organization.create
+name=testing organization
+description=this is a test
+companyname=test
+vatnr=666
+acl=admin:RW guest:R

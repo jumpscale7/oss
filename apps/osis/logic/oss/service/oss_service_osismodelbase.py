@@ -1,6 +1,6 @@
 from JumpScale import j
 
-class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
+class oss_service_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
         self._P_id=0
     
@@ -20,13 +20,13 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_type=""
     
-        self._P_interfaces=list()
+        self._P_serviceports=list()
     
         self._P_depends=list()
     
         self._P_depends_names=list()
     
-        self._P_assethost=0
+        self._P_machinehost=0
     
         self._P_memory=0
     
@@ -40,7 +40,9 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_nrcpu=0
     
-        self._P_rootpasswd=""
+        self._P_admin_name=""
+    
+        self._P_admin_passwd=""
     
         self._P_acl=dict()
     
@@ -50,7 +52,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P__meta=list()
     
-        self._P__meta=["osismodel","oss","machine",1] #@todo version not implemented now, just already foreseen
+        self._P__meta=["osismodel","oss","service",1] #@todo version not implemented now, just already foreseen
     
 
         pass
@@ -65,7 +67,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -85,7 +87,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -105,7 +107,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -125,7 +127,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property organization_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property organization_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -145,7 +147,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property label input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property label input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -165,7 +167,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property parent input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property parent input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -185,7 +187,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property parent_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property parent_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -205,7 +207,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property description input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property description input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -225,7 +227,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property type input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property type input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -236,23 +238,23 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def interfaces(self):
-        return self._P_interfaces
-    @interfaces.setter
-    def interfaces(self, value):
+    def serviceports(self):
+        return self._P_serviceports
+    @serviceports.setter
+    def serviceports(self, value):
         
         if not isinstance(value, list) and value is not None:
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property interfaces input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property serviceports input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_interfaces=value
-    @interfaces.deleter
-    def interfaces(self):
-        del self._P_interfaces
+        self._P_serviceports=value
+    @serviceports.deleter
+    def serviceports(self):
+        del self._P_serviceports
 
 
     @property
@@ -265,7 +267,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property depends input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property depends input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -285,7 +287,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property depends_names input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property depends_names input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -296,23 +298,23 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def assethost(self):
-        return self._P_assethost
-    @assethost.setter
-    def assethost(self, value):
+    def machinehost(self):
+        return self._P_machinehost
+    @machinehost.setter
+    def machinehost(self, value):
         
         if not isinstance(value, int) and value is not None:
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property assethost input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property machinehost input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_assethost=value
-    @assethost.deleter
-    def assethost(self):
-        del self._P_assethost
+        self._P_machinehost=value
+    @machinehost.deleter
+    def machinehost(self):
+        del self._P_machinehost
 
 
     @property
@@ -325,7 +327,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property memory input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property memory input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -345,7 +347,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property ssdcapacity input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property ssdcapacity input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -365,7 +367,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property hdcapacity input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property hdcapacity input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -385,7 +387,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property cpumhz input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property cpumhz input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -405,7 +407,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property nrcores input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property nrcores input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -425,7 +427,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property nrcpu input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property nrcpu input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -436,23 +438,43 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def rootpasswd(self):
-        return self._P_rootpasswd
-    @rootpasswd.setter
-    def rootpasswd(self, value):
+    def admin_name(self):
+        return self._P_admin_name
+    @admin_name.setter
+    def admin_name(self, value):
         
         if not isinstance(value, str) and value is not None:
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property rootpasswd input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property admin_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_rootpasswd=value
-    @rootpasswd.deleter
-    def rootpasswd(self):
-        del self._P_rootpasswd
+        self._P_admin_name=value
+    @admin_name.deleter
+    def admin_name(self):
+        del self._P_admin_name
+
+
+    @property
+    def admin_passwd(self):
+        return self._P_admin_passwd
+    @admin_passwd.setter
+    def admin_passwd(self, value):
+        
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
+            else:
+                msg="property admin_passwd input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_admin_passwd=value
+    @admin_passwd.deleter
+    def admin_passwd(self):
+        del self._P_admin_passwd
 
 
     @property
@@ -465,7 +487,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.dictionary.checkString(value):
                 value = j.basetype.dictionary.fromString(value)
             else:
-                msg="property acl input error, needs to be dict, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property acl input error, needs to be dict, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -485,7 +507,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property comments input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property comments input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -505,7 +527,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property guid input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property guid input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -525,7 +547,7 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property _meta input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: machine, value was:" + str(value)
+                msg="property _meta input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: service, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -535,16 +557,16 @@ class oss_machine_osismodelbase(j.code.classGetJSRootModelBase()):
         del self._P__meta
 
 
-    def new_interface(self,value=None):
+    def new_serviceport(self,value=None):
 
         if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","interface")()
+            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","serviceport")()
         else:
             value2=value
         
-        self._P_interfaces.append(value2)
-        if self._P_interfaces[-1].__dict__.has_key("_P_id"):
-            self._P_interfaces[-1].id=len(self._P_interfaces)
-        return self._P_interfaces[-1]
+        self._P_serviceports.append(value2)
+        if self._P_serviceports[-1].__dict__.has_key("_P_id"):
+            self._P_serviceports[-1].id=len(self._P_serviceports)
+        return self._P_serviceports[-1]
         
     

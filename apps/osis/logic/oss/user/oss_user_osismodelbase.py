@@ -8,7 +8,9 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
         self._P_id=0
     
-        self._P_organization=""
+        self._P_organization=0
+    
+        self._P_organization_name=""
     
         self._P_name=""
     
@@ -16,7 +18,7 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_comments=list()
     
-        self._P_contacts=list()
+        self._P_contactmethods=list()
     
         self._P_datasources=list()
     
@@ -57,11 +59,11 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     @organization.setter
     def organization(self, value):
         
-        if not isinstance(value, str) and value is not None:
-            if isinstance(value, basestring) and j.basetype.string.checkString(value):
-                value = j.basetype.string.fromString(value)
+        if not isinstance(value, int) and value is not None:
+            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
+                value = j.basetype.integer.fromString(value)
             else:
-                msg="property organization input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
+                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -69,6 +71,26 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     @organization.deleter
     def organization(self):
         del self._P_organization
+
+
+    @property
+    def organization_name(self):
+        return self._P_organization_name
+    @organization_name.setter
+    def organization_name(self, value):
+        
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
+            else:
+                msg="property organization_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_organization_name=value
+    @organization_name.deleter
+    def organization_name(self):
+        del self._P_organization_name
 
 
     @property
@@ -132,23 +154,23 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def contacts(self):
-        return self._P_contacts
-    @contacts.setter
-    def contacts(self, value):
+    def contactmethods(self):
+        return self._P_contactmethods
+    @contactmethods.setter
+    def contactmethods(self, value):
         
         if not isinstance(value, list) and value is not None:
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property contacts input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
+                msg="property contactmethods input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_contacts=value
-    @contacts.deleter
-    def contacts(self):
-        del self._P_contacts
+        self._P_contactmethods=value
+    @contactmethods.deleter
+    def contactmethods(self):
+        del self._P_contactmethods
 
 
     @property
@@ -230,59 +252,3 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     def _meta(self):
         del self._P__meta
 
-
-    def new_addresse(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","address")()
-        else:
-            value2=value
-        
-        self._P_addresses.append(value2)
-        if self._P_addresses[-1].__dict__.has_key("_P_id"):
-            self._P_addresses[-1].id=len(self._P_addresses)
-        return self._P_addresses[-1]
-        
-    
-
-    def new_comment(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","comment")()
-        else:
-            value2=value
-        
-        self._P_comments.append(value2)
-        if self._P_comments[-1].__dict__.has_key("_P_id"):
-            self._P_comments[-1].id=len(self._P_comments)
-        return self._P_comments[-1]
-        
-    
-
-    def new_contact(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","contact")()
-        else:
-            value2=value
-        
-        self._P_contacts.append(value2)
-        if self._P_contacts[-1].__dict__.has_key("_P_id"):
-            self._P_contacts[-1].id=len(self._P_contacts)
-        return self._P_contacts[-1]
-        
-    
-
-    def new_datasource(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","datasource")()
-        else:
-            value2=value
-        
-        self._P_datasources.append(value2)
-        if self._P_datasources[-1].__dict__.has_key("_P_id"):
-            self._P_datasources[-1].id=len(self._P_datasources)
-        return self._P_datasources[-1]
-        
-    

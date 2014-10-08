@@ -14,7 +14,7 @@ class oss_workflow_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_description=""
     
-        self._P_steps=list()
+        self._P_firststep=0
     
         self._P_acl=dict()
     
@@ -108,23 +108,23 @@ class oss_workflow_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def steps(self):
-        return self._P_steps
-    @steps.setter
-    def steps(self, value):
+    def firststep(self):
+        return self._P_firststep
+    @firststep.setter
+    def firststep(self, value):
         
-        if not isinstance(value, list) and value is not None:
-            if isinstance(value, basestring) and j.basetype.list.checkString(value):
-                value = j.basetype.list.fromString(value)
+        if not isinstance(value, int) and value is not None:
+            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
+                value = j.basetype.integer.fromString(value)
             else:
-                msg="property steps input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: workflow, value was:" + str(value)
+                msg="property firststep input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: workflow, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_steps=value
-    @steps.deleter
-    def steps(self):
-        del self._P_steps
+        self._P_firststep=value
+    @firststep.deleter
+    def firststep(self):
+        del self._P_firststep
 
 
     @property
@@ -186,17 +186,3 @@ class oss_workflow_osismodelbase(j.code.classGetJSRootModelBase()):
     def _meta(self):
         del self._P__meta
 
-
-    def new_step(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","workflow_step")()
-        else:
-            value2=value
-        
-        self._P_steps.append(value2)
-        if self._P_steps[-1].__dict__.has_key("_P_id"):
-            self._P_steps[-1].id=len(self._P_steps)
-        return self._P_steps[-1]
-        
-    

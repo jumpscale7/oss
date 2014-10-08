@@ -1,24 +1,24 @@
 from JumpScale import j
 
-class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
+class oss_document_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
         self._P_id=0
     
+        self._P_parent=0
+    
         self._P_name=""
     
-        self._P_label=""
+        self._P_creationdate=0
     
-        self._P_pod=0
+        self._P_moddate=0
     
-        self._P_pod_name=""
+        self._P_type=""
     
-        self._P_datacenter=0
+        self._P_ext=""
     
-        self._P_datacenter_name=""
+        self._P_contents=""
     
-        self._P_organization=0
-    
-        self._P_organization_name=""
+        self._P_objstorid=""
     
         self._P_description=""
     
@@ -30,7 +30,7 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P__meta=list()
     
-        self._P__meta=["osismodel","oss","rack",1] #@todo version not implemented now, just already foreseen
+        self._P__meta=["osismodel","oss","document",1] #@todo version not implemented now, just already foreseen
     
 
         pass
@@ -45,7 +45,7 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -53,6 +53,26 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
     @id.deleter
     def id(self):
         del self._P_id
+
+
+    @property
+    def parent(self):
+        return self._P_parent
+    @parent.setter
+    def parent(self, value):
+        
+        if not isinstance(value, int) and value is not None:
+            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
+                value = j.basetype.integer.fromString(value)
+            else:
+                msg="property parent input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_parent=value
+    @parent.deleter
+    def parent(self):
+        del self._P_parent
 
 
     @property
@@ -65,7 +85,7 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -76,143 +96,123 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def label(self):
-        return self._P_label
-    @label.setter
-    def label(self, value):
-        
-        if not isinstance(value, str) and value is not None:
-            if isinstance(value, basestring) and j.basetype.string.checkString(value):
-                value = j.basetype.string.fromString(value)
-            else:
-                msg="property label input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
-                raise RuntimeError(msg)
-    
-
-        self._P_label=value
-    @label.deleter
-    def label(self):
-        del self._P_label
-
-
-    @property
-    def pod(self):
-        return self._P_pod
-    @pod.setter
-    def pod(self, value):
+    def creationdate(self):
+        return self._P_creationdate
+    @creationdate.setter
+    def creationdate(self, value):
         
         if not isinstance(value, int) and value is not None:
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property pod input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property creationdate input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_pod=value
-    @pod.deleter
-    def pod(self):
-        del self._P_pod
+        self._P_creationdate=value
+    @creationdate.deleter
+    def creationdate(self):
+        del self._P_creationdate
 
 
     @property
-    def pod_name(self):
-        return self._P_pod_name
-    @pod_name.setter
-    def pod_name(self, value):
-        
-        if not isinstance(value, str) and value is not None:
-            if isinstance(value, basestring) and j.basetype.string.checkString(value):
-                value = j.basetype.string.fromString(value)
-            else:
-                msg="property pod_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
-                raise RuntimeError(msg)
-    
-
-        self._P_pod_name=value
-    @pod_name.deleter
-    def pod_name(self):
-        del self._P_pod_name
-
-
-    @property
-    def datacenter(self):
-        return self._P_datacenter
-    @datacenter.setter
-    def datacenter(self, value):
+    def moddate(self):
+        return self._P_moddate
+    @moddate.setter
+    def moddate(self, value):
         
         if not isinstance(value, int) and value is not None:
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property datacenter input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property moddate input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_datacenter=value
-    @datacenter.deleter
-    def datacenter(self):
-        del self._P_datacenter
+        self._P_moddate=value
+    @moddate.deleter
+    def moddate(self):
+        del self._P_moddate
 
 
     @property
-    def datacenter_name(self):
-        return self._P_datacenter_name
-    @datacenter_name.setter
-    def datacenter_name(self, value):
+    def type(self):
+        return self._P_type
+    @type.setter
+    def type(self, value):
         
         if not isinstance(value, str) and value is not None:
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property datacenter_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property type input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_datacenter_name=value
-    @datacenter_name.deleter
-    def datacenter_name(self):
-        del self._P_datacenter_name
+        self._P_type=value
+    @type.deleter
+    def type(self):
+        del self._P_type
 
 
     @property
-    def organization(self):
-        return self._P_organization
-    @organization.setter
-    def organization(self, value):
-        
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
-            else:
-                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
-                raise RuntimeError(msg)
-    
-
-        self._P_organization=value
-    @organization.deleter
-    def organization(self):
-        del self._P_organization
-
-
-    @property
-    def organization_name(self):
-        return self._P_organization_name
-    @organization_name.setter
-    def organization_name(self, value):
+    def ext(self):
+        return self._P_ext
+    @ext.setter
+    def ext(self, value):
         
         if not isinstance(value, str) and value is not None:
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property organization_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property ext input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_organization_name=value
-    @organization_name.deleter
-    def organization_name(self):
-        del self._P_organization_name
+        self._P_ext=value
+    @ext.deleter
+    def ext(self):
+        del self._P_ext
+
+
+    @property
+    def contents(self):
+        return self._P_contents
+    @contents.setter
+    def contents(self, value):
+        
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
+            else:
+                msg="property contents input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_contents=value
+    @contents.deleter
+    def contents(self):
+        del self._P_contents
+
+
+    @property
+    def objstorid(self):
+        return self._P_objstorid
+    @objstorid.setter
+    def objstorid(self, value):
+        
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
+            else:
+                msg="property objstorid input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_objstorid=value
+    @objstorid.deleter
+    def objstorid(self):
+        del self._P_objstorid
 
 
     @property
@@ -225,7 +225,7 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property description input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property description input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -245,7 +245,7 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.dictionary.checkString(value):
                 value = j.basetype.dictionary.fromString(value)
             else:
-                msg="property acl input error, needs to be dict, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property acl input error, needs to be dict, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -265,7 +265,7 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property comments input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property comments input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -285,7 +285,7 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property guid input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property guid input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -305,7 +305,7 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property _meta input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property _meta input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: document, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
