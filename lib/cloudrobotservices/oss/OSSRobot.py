@@ -198,7 +198,6 @@ group
 - create (c,n,new,update,u)
 -- id
 -- name
--- members #comma separated list of members, member of group defined as id, or name or part of name or even email
 -- datasources #comma separated list of datasources
 -- acl                  #as tags 'admin:RW guest:R'
 
@@ -520,9 +519,6 @@ service
 -- cpumhz
 -- nrcores
 -- nrcpu
--- organization    #comma separated list of orgs (as id, name part of name)
--- parent           #name, part of name, id, label, part of label of machine
--- depends          #comma separed list of machines we depend on (name, part of name, id, label, part of label of machine)
 -- admin_name
 -- admin_passwd
 -- acl              #as tags 'admin:RW guest:R'
@@ -721,9 +717,9 @@ priorities:
 
 """
 
-class OSSFactory(object):
+class OSSRobot(object):
 
-    def get(self):
+    def getRobot(self):
         robot=j.tools.txtrobot.get(initcmds)
         cmds=OSSRobotCmds()
         robot.addCmdClassObj(cmds)
@@ -756,18 +752,18 @@ class OSSRobotCmds():
 
     def organization__address(self, **args):
         if args.get('orgid'):
-            if not self.osscl.organization.exists(int(args.get('id'))):
+            if not self.osscl.organization.exists(int(args.get('orgid'))):
                 return 'Organization with ID %s was not found.' % args.get('orgid')
             organization = self.osscl.organization.get(int(args.get('orgid')))
         elif args.get('orgname'):
-            organization = self.osscl.organization.simpleSearch({'orgname': args.get('orgname')})
+            organization = self.osscl.organization.simpleSearch({'name': args.get('orgname')})
             if organization:
                 organization = self.osscl.organization.get(organization[0]['id'])
             else:
-                return 'Organization with name %s can not be found' % args.get('name')
+                return 'Organization with name %s can not be found' % args.get('orgname')
         else:
             return 'Organization ID or name must be passed'
-        address = organization.new_address()
+        address = self.osscl.address.new()
         address.country = args.get('country') if args.get('country') else address.country
         address.city = args.get('city') if args.get('city') else address.city
         address.citycode = args.get('citycode') if args.get('citycode') else address.citycode
@@ -775,6 +771,8 @@ class OSSRobotCmds():
         address.region = args.get('region') if args.get('region') else address.region
         address.street = args.get('street') if args.get('street') else address.street
         address.nr = args.get('nr') if args.get('nr') else address.nr
+        guid,_, _ = self.osscl.address.set(address)
+        organization.addresses.append(guid)
         self.osscl.organization.set(organization)
         return 'Organization address was added successfully'
 
@@ -908,7 +906,7 @@ class OSSRobotCmds():
                 return 'Group with ID %s was not found.' % args.get('groupid')
             group = self.osscl.group.get(int(args.get('orgid')))
         elif args.get('group'):
-            group = self.osscl.group.simpleSearch({'group': args.get('group')})
+            group = self.osscl.group.simpleSearch({'name': args.get('group')})
             if group:
                 group = self.osscl.group.get(group[0]['id'])
             else:
@@ -918,10 +916,9 @@ class OSSRobotCmds():
         user = args.get('user')
         if user:
             nativequery={'$or':[{'guid':user}, {'name':user}]}
-            parent = self.osscl.user.simpleSearch({}, nativequery=nativequery)
-            member = group.new_member()
+            member = self.osscl.user.simpleSearch({}, nativequery=nativequery)
             if member:
-                member.name = member[0]['guid']
+                group.members.append(member[0]['guid'])
                 self.osscl.group.set(group)
                 return 'Group member was added successfully'
             else:
@@ -1027,17 +1024,16 @@ class OSSRobotCmds():
             return 'Group ID or name must be passed'
         organization = args.get('organization')
         if organization:
-            nativequery={'$or':[{'guid':organization}, {'name':organization}]}
-            parent = self.osscl.organization.simpleSearch({}, nativequery=nativequery)
-            member = project.new_organization()
-            if member:
-                member.name = member[0]['guid']
+            nativequery={'$or':[{'id':organization}, {'name':organization}]}
+            org = self.osscl.organization.simpleSearch({}, nativequery=nativequery)
+            if org:
+                project.organizations.append(org[0]['guid'])
                 self.osscl.project.set(project)
-                return 'Group member was added successfully'
+                return 'Project organization was added successfully'
             else:
-                return "User with this id/name not found"
+                return "Organization with this id/name not found"
         else:
-            return 'User id/name must be passed'
+            return 'Organization id/name must be passed'
 
     def project__datasource(self, **args):
         if args.get('id'):
@@ -1081,7 +1077,7 @@ class OSSRobotCmds():
             if user:
                 user = self.osscl.user.get(user[0]['id'])
             else:
-                return 'User with name %s can not be found' % args.get('name')
+                return 'User with name %s cannot be found' % args.get('name')
         else:
             return 'User ID or name must be passed'
         datasource = user.new_datasource()
@@ -1095,14 +1091,14 @@ class OSSRobotCmds():
                 return 'User with ID %s was not found.' % args.get('userid')
             user = self.osscl.user.get(int(args.get('userid')))
         elif args.get('username'):
-            user = self.osscl.user.simpleSearch({'username': args.get('username')})
+            user = self.osscl.user.simpleSearch({'name': args.get('username')})
             if user:
                 user = self.osscl.user.get(user[0]['id'])
             else:
-                return 'User with name %s can not be found' % args.get('name')
+                return 'User with name %s can not be found' % args.get('username')
         else:
             return 'User ID or name must be passed'
-        address = user.new_address()
+        address = self.osscl.address.new()
         address.country = args.get('country') if args.get('country') else address.country
         address.city = args.get('city') if args.get('city') else address.city
         address.citycode = args.get('citycode') if args.get('citycode') else address.citycode
@@ -1110,14 +1106,16 @@ class OSSRobotCmds():
         address.region = args.get('region') if args.get('region') else address.region
         address.street = args.get('street') if args.get('street') else address.street
         address.nr = args.get('nr') if args.get('nr') else address.nr
+        guid,_, _ = self.osscl.address.set(address)
+        user.addresses.append(guid)
         self.osscl.user.set(user)
         return 'User address was added successfully'
 
     def user__contactmethod(self, **args):
-        if args.get('orgid'):
-            if not self.osscl.user.exists(int(args.get('orgid'))):
-                return 'User with ID %s was not found.' % args.get('orgid')
-            user = self.osscl.user.get(int(args.get('orgid')))
+        if args.get('id'):
+            if not self.osscl.user.exists(int(args.get('id'))):
+                return 'User with ID %s was not found.' % args.get('id')
+            user = self.osscl.user.get(int(args.get('id')))
         elif args.get('name'):
             user = self.osscl.user.simpleSearch({'name': args.get('name')})
             if user:
@@ -1126,9 +1124,11 @@ class OSSRobotCmds():
                 return 'User with name %s can not be found' % args.get('name')
         else:
             return 'User ID or name must be passed'
-        contactmethod = user.new_contactmethod()
-        contactmethod.type = args.get('type') if args.get('type') else contactmethod.type
-        contactmethod.value = args.get('value') if args.get('value') else contactmethod.value
+        contactmethod = self.osscl.contactmethod.new()
+        contactmethod.type = args.get('type')
+        contactmethod.value = args.get('value')
+        guid, _, _ = self.osscl.contactmethod.set(contactmethod)
+        user.contactmethods.append(guid)
         self.osscl.user.set(user)
         return 'User contactmethod was added successfully'
 
@@ -1580,7 +1580,7 @@ class OSSRobotCmds():
         # TODO set data sources
         if args.get('acl'):
             tags = j.core.tags.getObject(args.get('acl'))
-            asset.acl = tags.getDict() if if tags.getDict() else asset.acl
+            asset.acl = tags.getDict() if tags.getDict() else asset.acl
         self.osscl.asset.set(asset)
         return 'Asset was created/updated successfully'
 
@@ -1632,7 +1632,13 @@ class OSSRobotCmds():
         machine.cpumhz = int(args.get('cpumhz')) if args.get('cpumhz') else machine.cpumhz
         machine.nrcores = int(args.get('nrcores')) if args.get('nrcores') else machine.nrcores
         machine.nrcpu = int(args.get('nrcpu')) if args.get('nrcpu') else machine.nrcpu
-        machine.organization = args.get('organization') if args.get('organization') else machine.organization
+        organization = args.get('organization')
+        org = None
+        if organization:
+          nativequery={'$or':[{'id':organization}, {'name':organization}]}
+          org = self.osscl.organization.simpleSearch({}, nativequery=nativequery)
+        orgid = org[0]['id'] if org else machine.organization
+        machine.organization = orgid
         machine.assethost = int(args.get('assethost')) if args.get('assethost') else machine.assethost
         machine.parent = int(args.get('parent')) if args.get('parent') else machine.parent
         machine.type = args.get('type') if args.get('type') else machine.type
@@ -1762,7 +1768,13 @@ class OSSRobotCmds():
         service.cpumhz = int(args.get('cpumhz')) if args.get('cpumhz') else service.cpumhz
         service.nrcores = int(args.get('nrcores')) if args.get('nrcores') else service.nrcores
         service.nrcpu = int(args.get('nrcpu')) if args.get('nrcpu') else service.nrcpu
-        service.organization = args.get('organization') if args.get('organization') else service.organization
+        org = None
+        organization = args.get('organization')
+        if organization:
+          nativequery={'$or':[{'id':organization}, {'name':organization}]}
+          org = self.osscl.organization.simpleSearch({}, nativequery=nativequery)
+        orgid = org[0]['id'] if org else service.organization
+        service.organization = orgid
         service.assethost = int(args.get('machinehost')) if args.get('assethost') else service.machinehost
         service.parent = int(args.get('parent')) if args.get('parent') else service.parent
         service.admin_name = args.get('admin_name', service.admin_name)
@@ -1792,20 +1804,24 @@ class OSSRobotCmds():
             nativequery={'$or':[{'id':serviceportid}, {'name':serviceportid}]}
             serviceport = self.osscl.serviceport.simpleSearch({}, nativequery=nativequery)
             if serviceport:
-                member = service.new_serviceport()
-                member.id = member[0]['id']
-                member.ipaddr = member[0]['ipaddr']
-                member.ipaddr6 = member[0]['ipaddr6']
-                member.url = member[0]['url']
-                member.port = member[0]['port']
-                member.type = member[0]['type']
-                member.description = member[0]['description']
-                member.supportremarks = member[0]['supportremarks']
-                member.comments = member[0]['comments']
-                self.osscl.service.set(group)
+                guid = serviceport['guid']
+                service.serviceports.append(guid)
+                self.osscl.service.set(service)
                 return 'Service serviceport was added successfully'
             else:
-                return "serviceport with this id/name not found"
+                member = self.osscl.serviceport.new()
+                member.ipaddr = args.get('ipaddr')
+                member.ipaddr6 = args.get('ipaddr6')
+                member.url = args.get('url')
+                member.port = args.get('port')
+                member.type = args.get('type')
+                member.description = args.get('description')
+                member.supportremarks = args.get('supportremarks')
+                member.comments = args.get('comments')
+                guid, _, _ = self.osscl.serviceport.set(member)
+                service.serviceports.append(guid)
+                self.osscl.service.set(service)
+                return "Service serviceport was added successfully"
         else:
             return 'serviceport id/name must be passed'
 

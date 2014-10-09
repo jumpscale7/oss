@@ -46,7 +46,7 @@
     prop:addresses list(str),,reference to addr (guid)
     prop:comments list(str),,reference to comment (guid)
     prop:contactmethods list(str),,reference to contactmethod
-    prop:datasources list(int),,source(s) where data comes from (reference)
+    prop:datasources list(datasource),,source(s) where data comes from (reference)
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
 
 [rootmodel:useridentification] @index
