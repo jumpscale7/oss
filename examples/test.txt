@@ -4,3 +4,75 @@ description=this is a test
 companyname=test
 vatnr=666
 acl=admin:RW guest:R
+
+!organization.address
+orgname=testing organization
+country=Egypt
+city=ElGouna
+citycode=42
+zone=
+
+
+!machine.create
+name=testing machine
+description=machine for testing
+memory=1024
+ssdcapacity=10
+hdcapacity=10
+organization=testing organization
+
+
+!user.create
+name=testing user
+organization= testing organization
+acl=admin:RW guest:R
+
+!user.address
+username=testing user
+country=Egypt
+city=ElGouna
+citycode=42
+zone=xfiles
+street=elm street
+
+!user.datasource 
+name=testing user
+datasourcename=input
+
+!user.contactmethod
+name=testing user
+type=email
+value=a@b.com
+
+!user.create
+name=another testing user
+organization= testing organization
+acl=admin:RW guest:R
+
+
+!group.create
+name=testing group
+datasources=files,otherwise
+acl=admin:RW guest:R
+
+!group.member
+group=testing group
+user=testing user
+
+!group.member
+group=testing group
+user=another testing user
+
+!service.create
+name=testing service
+organization=testing organization
+label=some label
+description=this is for testing
+type=test
+
+!service.serviceport
+name=testing service
+serviceport=1234
+
+
+

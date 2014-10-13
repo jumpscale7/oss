@@ -252,3 +252,17 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     def _meta(self):
         del self._P__meta
 
+
+    def new_datasource(self,value=None):
+
+        if value==None:
+            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","datasource")()
+        else:
+            value2=value
+        
+        self._P_datasources.append(value2)
+        if self._P_datasources[-1].__dict__.has_key("_P_id"):
+            self._P_datasources[-1].id=len(self._P_datasources)
+        return self._P_datasources[-1]
+        
+    
