@@ -8,15 +8,15 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_label=""
     
-        self._P_pod=0
+        self._P_pod=""
     
         self._P_pod_name=""
     
-        self._P_datacenter=0
+        self._P_datacenter=""
     
         self._P_datacenter_name=""
     
-        self._P_organization=0
+        self._P_organization=""
     
         self._P_organization_name=""
     
@@ -101,11 +101,11 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
     @pod.setter
     def pod(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property pod input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property pod input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -141,11 +141,11 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
     @datacenter.setter
     def datacenter(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property datacenter input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property datacenter input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -181,11 +181,11 @@ class oss_rack_osismodelbase(j.code.classGetJSRootModelBase()):
     @organization.setter
     def organization(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
+                msg="property organization input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: rack, value was:" + str(value)
                 raise RuntimeError(msg)
     
 

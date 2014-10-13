@@ -14,13 +14,13 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_priority=0
     
-        self._P_project=0
+        self._P_project=""
     
         self._P_project_name=""
     
         self._P_type=""
     
-        self._P_parent=0
+        self._P_parent=""
     
         self._P_parent_name=""
     
@@ -34,25 +34,25 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_duplicate_names=list()
     
-        self._P_taskowner=0
+        self._P_taskowner=""
     
         self._P_taskowner_name=""
     
-        self._P_source=0
+        self._P_source=""
     
         self._P_source_name=""
     
-        self._P_sprint=0
+        self._P_sprint=""
     
         self._P_sprint_name=""
     
-        self._P_organization=0
+        self._P_organization=""
     
         self._P_organization_name=""
     
-        self._P_nextstep=0
+        self._P_nextstepdate=0
     
-        self._P_workflow_name=""
+        self._P_workflow=""
     
         self._P_job_status=""
     
@@ -171,11 +171,11 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
     @project.setter
     def project(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property project input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
+                msg="property project input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -231,11 +231,11 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
     @parent.setter
     def parent(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property parent input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
+                msg="property parent input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -371,11 +371,11 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
     @taskowner.setter
     def taskowner(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property taskowner input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
+                msg="property taskowner input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -411,11 +411,11 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
     @source.setter
     def source(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property source input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
+                msg="property source input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -451,11 +451,11 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
     @sprint.setter
     def sprint(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property sprint input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
+                msg="property sprint input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -491,11 +491,11 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
     @organization.setter
     def organization(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
+                msg="property organization input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -526,43 +526,43 @@ class oss_ticket_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def nextstep(self):
-        return self._P_nextstep
-    @nextstep.setter
-    def nextstep(self, value):
+    def nextstepdate(self):
+        return self._P_nextstepdate
+    @nextstepdate.setter
+    def nextstepdate(self, value):
         
         if not isinstance(value, int) and value is not None:
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property nextstep input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
+                msg="property nextstepdate input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_nextstep=value
-    @nextstep.deleter
-    def nextstep(self):
-        del self._P_nextstep
+        self._P_nextstepdate=value
+    @nextstepdate.deleter
+    def nextstepdate(self):
+        del self._P_nextstepdate
 
 
     @property
-    def workflow_name(self):
-        return self._P_workflow_name
-    @workflow_name.setter
-    def workflow_name(self, value):
+    def workflow(self):
+        return self._P_workflow
+    @workflow.setter
+    def workflow(self, value):
         
         if not isinstance(value, str) and value is not None:
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property workflow_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
+                msg="property workflow input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: ticket, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_workflow_name=value
-    @workflow_name.deleter
-    def workflow_name(self):
-        del self._P_workflow_name
+        self._P_workflow=value
+    @workflow.deleter
+    def workflow(self):
+        del self._P_workflow
 
 
     @property

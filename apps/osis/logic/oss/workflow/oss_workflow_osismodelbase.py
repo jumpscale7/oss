@@ -14,9 +14,11 @@ class oss_workflow_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_description=""
     
-        self._P_firststep=0
+        self._P_workflowsteps=list()
     
         self._P_acl=dict()
+    
+        self._P_comments=list()
     
         self._P_guid=""
     
@@ -108,23 +110,23 @@ class oss_workflow_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def firststep(self):
-        return self._P_firststep
-    @firststep.setter
-    def firststep(self, value):
+    def workflowsteps(self):
+        return self._P_workflowsteps
+    @workflowsteps.setter
+    def workflowsteps(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, list) and value is not None:
+            if isinstance(value, basestring) and j.basetype.list.checkString(value):
+                value = j.basetype.list.fromString(value)
             else:
-                msg="property firststep input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: workflow, value was:" + str(value)
+                msg="property workflowsteps input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: workflow, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_firststep=value
-    @firststep.deleter
-    def firststep(self):
-        del self._P_firststep
+        self._P_workflowsteps=value
+    @workflowsteps.deleter
+    def workflowsteps(self):
+        del self._P_workflowsteps
 
 
     @property
@@ -145,6 +147,26 @@ class oss_workflow_osismodelbase(j.code.classGetJSRootModelBase()):
     @acl.deleter
     def acl(self):
         del self._P_acl
+
+
+    @property
+    def comments(self):
+        return self._P_comments
+    @comments.setter
+    def comments(self, value):
+        
+        if not isinstance(value, list) and value is not None:
+            if isinstance(value, basestring) and j.basetype.list.checkString(value):
+                value = j.basetype.list.fromString(value)
+            else:
+                msg="property comments input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: workflow, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_comments=value
+    @comments.deleter
+    def comments(self):
+        del self._P_comments
 
 
     @property
