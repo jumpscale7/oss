@@ -40,7 +40,7 @@
     users
     """
     prop:id int,,
-    prop:list(str) str,,                                                                @ref:organization
+    prop:organizations list(str) str,,                                                                @ref:organization
     prop:organization_names str,,
     prop:name str,,    
     prop:addresses list(str),,reference to addr (guid)                                  @ref:addresss

@@ -8,7 +8,7 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
         self._P_id=0
     
-        self._P_list(str)=""
+        self._P_organizations=list()
     
         self._P_organization_names=""
     
@@ -56,23 +56,23 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def list(str)(self):
-        return self._P_list(str)
-    @list(str).setter
-    def list(str)(self, value):
+    def organizations(self):
+        return self._P_organizations
+    @organizations.setter
+    def organizations(self, value):
         
-        if not isinstance(value, str) and value is not None:
-            if isinstance(value, basestring) and j.basetype.string.checkString(value):
-                value = j.basetype.string.fromString(value)
+        if not isinstance(value, list) and value is not None:
+            if isinstance(value, basestring) and j.basetype.list.checkString(value):
+                value = j.basetype.list.fromString(value)
             else:
-                msg="property list(str) input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
+                msg="property organizations input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_list(str)=value
-    @list(str).deleter
-    def list(str)(self):
-        del self._P_list(str)
+        self._P_organizations=value
+    @organizations.deleter
+    def organizations(self):
+        del self._P_organizations
 
 
     @property
