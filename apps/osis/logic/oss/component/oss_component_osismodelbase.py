@@ -1,12 +1,14 @@
 from JumpScale import j
 
-class oss_netaddr_osismodelbase(j.code.classGetJSRootModelBase()):
+class oss_component_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
-        self._P_id=0
+        self._P_type=""
     
-        self._P_ipaddr=""
+        self._P_nr=0
     
-        self._P_ipaddr6=""
+        self._P_brand=""
+    
+        self._P_model=""
     
         self._P_description=""
     
@@ -14,73 +16,95 @@ class oss_netaddr_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_comments=list()
     
+        self._P_id=0
+    
         self._P_guid=""
     
         self._P__meta=list()
     
-        self._P__meta=["osismodel","oss","netaddr",1] #@todo version not implemented now, just already foreseen
+        self._P__meta=["osismodel","oss","component",1] #@todo version not implemented now, just already foreseen
     
 
         pass
 
     @property
-    def id(self):
-        return self._P_id
-    @id.setter
-    def id(self, value):
+    def type(self):
+        return self._P_type
+    @type.setter
+    def type(self, value):
+        
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
+            else:
+                msg="property type input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_type=value
+    @type.deleter
+    def type(self):
+        del self._P_type
+
+
+    @property
+    def nr(self):
+        return self._P_nr
+    @nr.setter
+    def nr(self, value):
         
         if not isinstance(value, int) and value is not None:
             if isinstance(value, basestring) and j.basetype.integer.checkString(value):
                 value = j.basetype.integer.fromString(value)
             else:
-                msg="property id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: netaddr, value was:" + str(value)
+                msg="property nr input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_id=value
-    @id.deleter
-    def id(self):
-        del self._P_id
+        self._P_nr=value
+    @nr.deleter
+    def nr(self):
+        del self._P_nr
 
 
     @property
-    def ipaddr(self):
-        return self._P_ipaddr
-    @ipaddr.setter
-    def ipaddr(self, value):
+    def brand(self):
+        return self._P_brand
+    @brand.setter
+    def brand(self, value):
         
         if not isinstance(value, str) and value is not None:
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property ipaddr input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: netaddr, value was:" + str(value)
+                msg="property brand input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_ipaddr=value
-    @ipaddr.deleter
-    def ipaddr(self):
-        del self._P_ipaddr
+        self._P_brand=value
+    @brand.deleter
+    def brand(self):
+        del self._P_brand
 
 
     @property
-    def ipaddr6(self):
-        return self._P_ipaddr6
-    @ipaddr6.setter
-    def ipaddr6(self, value):
+    def model(self):
+        return self._P_model
+    @model.setter
+    def model(self, value):
         
         if not isinstance(value, str) and value is not None:
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property ipaddr6 input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: netaddr, value was:" + str(value)
+                msg="property model input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_ipaddr6=value
-    @ipaddr6.deleter
-    def ipaddr6(self):
-        del self._P_ipaddr6
+        self._P_model=value
+    @model.deleter
+    def model(self):
+        del self._P_model
 
 
     @property
@@ -93,7 +117,7 @@ class oss_netaddr_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property description input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: netaddr, value was:" + str(value)
+                msg="property description input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -113,7 +137,7 @@ class oss_netaddr_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property supportremarks input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: netaddr, value was:" + str(value)
+                msg="property supportremarks input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -133,7 +157,7 @@ class oss_netaddr_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property comments input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: netaddr, value was:" + str(value)
+                msg="property comments input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -141,6 +165,26 @@ class oss_netaddr_osismodelbase(j.code.classGetJSRootModelBase()):
     @comments.deleter
     def comments(self):
         del self._P_comments
+
+
+    @property
+    def id(self):
+        return self._P_id
+    @id.setter
+    def id(self, value):
+        
+        if not isinstance(value, int) and value is not None:
+            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
+                value = j.basetype.integer.fromString(value)
+            else:
+                msg="property id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_id=value
+    @id.deleter
+    def id(self):
+        del self._P_id
 
 
     @property
@@ -153,7 +197,7 @@ class oss_netaddr_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property guid input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: netaddr, value was:" + str(value)
+                msg="property guid input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -173,7 +217,7 @@ class oss_netaddr_osismodelbase(j.code.classGetJSRootModelBase()):
             if isinstance(value, basestring) and j.basetype.list.checkString(value):
                 value = j.basetype.list.fromString(value)
             else:
-                msg="property _meta input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: netaddr, value was:" + str(value)
+                msg="property _meta input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: component, value was:" + str(value)
                 raise RuntimeError(msg)
     
 

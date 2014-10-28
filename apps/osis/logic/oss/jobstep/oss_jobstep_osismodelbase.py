@@ -8,7 +8,9 @@ class oss_jobstep_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
         self._P_jobguid=""
     
-        self._P_workflowstep_id=0
+        self._P_workflow=""
+    
+        self._P_workflowstep=""
     
         self._P_workflowstep_name=""
     
@@ -31,8 +33,6 @@ class oss_jobstep_osismodelbase(j.code.classGetJSRootModelBase()):
         self._P_status=""
     
         self._P_nextsteps=list()
-    
-        self._P_comments=""
     
         self._P_logs=""
     
@@ -68,23 +68,43 @@ class oss_jobstep_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def workflowstep_id(self):
-        return self._P_workflowstep_id
-    @workflowstep_id.setter
-    def workflowstep_id(self, value):
+    def workflow(self):
+        return self._P_workflow
+    @workflow.setter
+    def workflow(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property workflowstep_id input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: jobstep, value was:" + str(value)
+                msg="property workflow input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: jobstep, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_workflowstep_id=value
-    @workflowstep_id.deleter
-    def workflowstep_id(self):
-        del self._P_workflowstep_id
+        self._P_workflow=value
+    @workflow.deleter
+    def workflow(self):
+        del self._P_workflow
+
+
+    @property
+    def workflowstep(self):
+        return self._P_workflowstep
+    @workflowstep.setter
+    def workflowstep(self, value):
+        
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
+            else:
+                msg="property workflowstep input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: jobstep, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_workflowstep=value
+    @workflowstep.deleter
+    def workflowstep(self):
+        del self._P_workflowstep
 
 
     @property
@@ -305,26 +325,6 @@ class oss_jobstep_osismodelbase(j.code.classGetJSRootModelBase()):
     @nextsteps.deleter
     def nextsteps(self):
         del self._P_nextsteps
-
-
-    @property
-    def comments(self):
-        return self._P_comments
-    @comments.setter
-    def comments(self, value):
-        
-        if not isinstance(value, str) and value is not None:
-            if isinstance(value, basestring) and j.basetype.string.checkString(value):
-                value = j.basetype.string.fromString(value)
-            else:
-                msg="property comments input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: jobstep, value was:" + str(value)
-                raise RuntimeError(msg)
-    
-
-        self._P_comments=value
-    @comments.deleter
-    def comments(self):
-        del self._P_comments
 
 
     @property

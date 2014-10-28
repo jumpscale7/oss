@@ -14,7 +14,7 @@ class oss_organization_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_companyname=""
     
-        self._P_parent=0
+        self._P_parent=""
     
         self._P_parent_name=""
     
@@ -125,11 +125,11 @@ class oss_organization_osismodelbase(j.code.classGetJSRootModelBase()):
     @parent.setter
     def parent(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property parent input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: organization, value was:" + str(value)
+                msg="property parent input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: organization, value was:" + str(value)
                 raise RuntimeError(msg)
     
 

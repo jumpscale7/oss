@@ -16,6 +16,7 @@ class oss_project(OsisBaseObject,oss_project_osismodelbase):
         oss_project_osismodelbase.__init__(self)
         if ddict <> {}:
             self.load(ddict)
+        self.guid=self.guid.replace("-","")
 
 
     # def getContentKey(self):

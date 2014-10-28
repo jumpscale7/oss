@@ -16,6 +16,7 @@ class oss_message(OsisBaseObject,oss_message_osismodelbase):
         oss_message_osismodelbase.__init__(self)
         if ddict <> {}:
             self.load(ddict)
+        self.guid=self.guid.replace("-","")
 
 
     # def getContentKey(self):

@@ -10,7 +10,7 @@ class oss_interface_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_vxlanid=""
     
-        self._P_organization=0
+        self._P_organization=""
     
         self._P_netaddr=list()
     
@@ -123,11 +123,11 @@ class oss_interface_osismodelbase(j.code.classGetJSRootModelBase()):
     @organization.setter
     def organization(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: interface, value was:" + str(value)
+                msg="property organization input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: interface, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -336,17 +336,3 @@ class oss_interface_osismodelbase(j.code.classGetJSRootModelBase()):
     def _meta(self):
         del self._P__meta
 
-
-    def new_netaddr(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","netaddr")()
-        else:
-            value2=value
-        
-        self._P_netaddr.append(value2)
-        if self._P_netaddr[-1].__dict__.has_key("_P_id"):
-            self._P_netaddr[-1].id=len(self._P_netaddr)
-        return self._P_netaddr[-1]
-        
-    

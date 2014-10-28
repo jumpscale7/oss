@@ -22,6 +22,8 @@ class oss_workflowstep_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_jscript=""
     
+        self._P_comments=list()
+    
         self._P_guid=""
     
         self._P__meta=list()
@@ -189,6 +191,26 @@ class oss_workflowstep_osismodelbase(j.code.classGetJSRootModelBase()):
     @jscript.deleter
     def jscript(self):
         del self._P_jscript
+
+
+    @property
+    def comments(self):
+        return self._P_comments
+    @comments.setter
+    def comments(self, value):
+        
+        if not isinstance(value, list) and value is not None:
+            if isinstance(value, basestring) and j.basetype.list.checkString(value):
+                value = j.basetype.list.fromString(value)
+            else:
+                msg="property comments input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: workflowstep, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_comments=value
+    @comments.deleter
+    def comments(self):
+        del self._P_comments
 
 
     @property

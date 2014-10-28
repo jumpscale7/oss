@@ -4,13 +4,13 @@ class oss_asset_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
         self._P_id=0
     
-        self._P_organization=0
+        self._P_organization=""
     
         self._P_organization_names=""
     
         self._P_label=""
     
-        self._P_parent=0
+        self._P_parent=""
     
         self._P_parent_name=""
     
@@ -30,7 +30,7 @@ class oss_asset_osismodelbase(j.code.classGetJSRootModelBase()):
     
         self._P_depends_names=list()
     
-        self._P_rackid=0
+        self._P_rack=""
     
         self._P_datacenter_name=""
     
@@ -87,11 +87,11 @@ class oss_asset_osismodelbase(j.code.classGetJSRootModelBase()):
     @organization.setter
     def organization(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: asset, value was:" + str(value)
+                msg="property organization input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: asset, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -147,11 +147,11 @@ class oss_asset_osismodelbase(j.code.classGetJSRootModelBase()):
     @parent.setter
     def parent(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property parent input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: asset, value was:" + str(value)
+                msg="property parent input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: asset, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
@@ -342,23 +342,23 @@ class oss_asset_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def rackid(self):
-        return self._P_rackid
-    @rackid.setter
-    def rackid(self, value):
+    def rack(self):
+        return self._P_rack
+    @rack.setter
+    def rack(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, str) and value is not None:
+            if isinstance(value, basestring) and j.basetype.string.checkString(value):
+                value = j.basetype.string.fromString(value)
             else:
-                msg="property rackid input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: asset, value was:" + str(value)
+                msg="property rack input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: asset, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_rackid=value
-    @rackid.deleter
-    def rackid(self):
-        del self._P_rackid
+        self._P_rack=value
+    @rack.deleter
+    def rack(self):
+        del self._P_rack
 
 
     @property
@@ -600,31 +600,3 @@ class oss_asset_osismodelbase(j.code.classGetJSRootModelBase()):
     def _meta(self):
         del self._P__meta
 
-
-    def new_interface(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","interface")()
-        else:
-            value2=value
-        
-        self._P_interfaces.append(value2)
-        if self._P_interfaces[-1].__dict__.has_key("_P_id"):
-            self._P_interfaces[-1].id=len(self._P_interfaces)
-        return self._P_interfaces[-1]
-        
-    
-
-    def new_component(self,value=None):
-
-        if value==None:
-            value2=j.core.codegenerator.getClassJSModel("osismodel","oss","component")()
-        else:
-            value2=value
-        
-        self._P_components.append(value2)
-        if self._P_components[-1].__dict__.has_key("_P_id"):
-            self._P_components[-1].id=len(self._P_components)
-        return self._P_components[-1]
-        
-    

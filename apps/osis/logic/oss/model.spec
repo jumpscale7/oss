@@ -10,14 +10,14 @@
     prop:id int,,
     prop:description str,,
     prop:companyname str,,optional name 
-    prop:parent int,,organization can belong to other organization
+    prop:parent str,,organization can belong to other organization                      @ref:organization
     prop:parent_name str,,
-    prop:addresses list(str),,reference to addresses (guid)
-    prop:contactmethods list(str),,reference to contactmethod (guid)
+    prop:addresses list(str),,reference to addresses (guid)                             @ref:address
+    prop:contactmethods list(str),,reference to contactmethod (guid)                    @ref:contactmethod
     prop:vatnr str,,
-    prop:datasources list(int),,source(s) where data comes from (reference)
+    prop:datasources list(str),,source(s) where data comes from (reference)             @ref:datasource
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment
 
 [rootmodel:address]
     prop:id int,,
@@ -32,7 +32,7 @@
 
 [rootmodel:contactmethod]
     prop:id int,,
-    prop:type str,, phone;mobile;email;skype;linkedin;facebook;jabber
+    prop:type str,,                                                                     @types:phone|mobile|email|skype|linkedin|facebook|jabber       
     prop:value str,,e.g. tel nr
 
 [rootmodel:user] @index
@@ -40,13 +40,14 @@
     users
     """
     prop:id int,,
-    prop:organization int,,
-    prop:organization_name str,,
+    prop:organizations list(str) str,,                                                                @ref:organization
+    prop:organization_names str,,
     prop:name str,,    
-    prop:addresses list(str),,reference to addr (guid)
-    prop:comments list(str),,reference to comment (guid)
-    prop:contactmethods list(str),,reference to contactmethod
-    prop:datasources list(int),,source(s) where data comes from (reference)
+    prop:addresses list(str),,reference to addr (guid)                                  @ref:addresss
+    prop:comments list(str),,reference to comments                                      @ref:comment
+    prop:userids list(str),,                                                            @ref:useridentification
+    prop:contactmethods list(str),,reference to contactmethods                          @ref:contactmethod
+    prop:datasources list(str),,source(s) where data comes from (reference)             @ref:datasource
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
 
 [rootmodel:useridentification] @index
@@ -67,12 +68,12 @@
     """
     prop:id int,,    
     prop:name str,,
-    prop:addresses list(str),,reference to addr
-    prop:members list(int),,users in group (based on ids)
+    prop:addresses list(str),,reference to addr                                         @ref:address
+    prop:members list(str),,users in group (based on ids)                               @ref:user
     prop:members_name list(str),,
-    prop:comments list(str),,reference to comments (guid)
-    prop:contactmethods list(str),,reference to contactmethod(guid)
-    prop:datasources list(int),,source(s) where data comes from (reference)
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
+    prop:contactmethods list(str),,reference to contactmethods                          @ref:contactmethod
+    prop:datasources list(str),,source(s) where data comes from (reference)             @ref:datasource
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
 
 [rootmodel:ticket] @index
@@ -82,36 +83,36 @@
     prop:id int,,    
     prop:name str,,
     prop:description str,,
-    prop:priority int,,level 0-4 (4 is most urgent)
-    prop:project int,,link to project
+    prop:priority int,,level 0-4 (4 is most urgent)                                              @limit:0-4
+    prop:project str,,link to project                                                            @ref:project
     prop:project_name str,,
-    prop:type str,,supported types:story;task;issue;event;bug;feature;ticket;perfissue,check
-    prop:parent int,,
+    prop:type str,,                                                                              @type:story|task|issue|event|bug|feature|ticket|perfissue|check
+    prop:parent str,,                                                                            @ref:ticket
     prop:parent_name str,,
-    prop:depends list(int),,this task depends on
+    prop:depends list(str),,this task depends on                                                 @ref:ticket
     prop:depends_names list(str),,
     prop:deadline int,,epoch of when task needs to be done
-    prop:duplicate list(int),,list of duplicates to this issue
+    prop:duplicate list(str),,list of duplicates to this issue                                   @ref:ticket
     prop:duplicate_names list(str),,
-    prop:taskowner int,,owner of task (user)
+    prop:taskowner str,,owner of task (user)                                                     @ref:user
     prop:taskowner_name str,,owner of task (user)
-    prop:source int,,owner of task (user)
+    prop:source str,,owner of task (user)                                                        @ref:user
     prop:source_name str,,name of user where request came from (can be email, username, ...)   
-    prop:sprint int,,
+    prop:sprint str,,                                                                            @ref:user
     prop:sprint_name str,,
-    prop:organization int,, link to organization if any
+    prop:organization str,, link to organization if any                                          @ref:organization
     prop:organization_name str,,
-    prop:nextstep int,,date for next day to continue with this ticket
-    prop:workflow_name str,,current workflow active
-    prop:job_status str,,values are: PENDING,ACTIVE,ERROR,OK,WARNING,CRITICAL
-    prop:jobs list(int),,link to workflows
+    prop:nextstepdate int,,date for next day to continue with this ticket
+    prop:workflow str,,current active workflow                                                   @ref:workflow
+    prop:job_status str,,values are:                                                             @type:PENDING|ACTIVE|ERROR|OK|WARNING|CRITICAL
+    prop:jobs list(str),,link to workflows                                                       @ref job
     prop:time_created int,,
     prop:time_lastmessage int,,
     prop:time_lastresponse int,,
     prop:time_closed int,,
-    prop:messages list(str),, reference to message
-    prop:comments list(str),,reference to comments
-    prop:datasources list(int),,source(s) where data comes from (reference)
+    prop:messages list(str),, reference to message                                               @ref:message
+    prop:comments list(str),,reference to comments                                               @ref:comment deletechildren
+    prop:datasources list(str),,source(s) where data comes from (reference)                      @ref:datasource
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
     prop:params str,,json representation of dict which has all arguments required for this ticket
 
@@ -133,6 +134,7 @@
     prop:type str,,types are: email;sms;gtalk;tel
     prop:format str,, html;confl;md;text default is text
     prop:ticket int,,
+    prop:comments list(str),,reference to comments                                               @ref:comment deletechildren
 
 [model:datasource]
     """
@@ -146,10 +148,11 @@
     """
     prop:id int,,    
     prop:name str,,
-    prop:tickettype str,,supported types:story;task;issue;event;bug;feature;ticket;perfissue,check (if empty then all)
+    prop:tickettype str,,                                                                           @type:story;task;issue;event;bug;feature;ticket;perfissue,check (if empty then all)
     prop:description str,,
-    prop:firststep int,,reference to first workflowstep to start with
+    prop:workflowsteps list(str),,                                                                  @ref:workflowstep deletechildren
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
+    prop:comments list(str),,reference to comments                                                  @ref:comment deletechildren
 
 [rootmodel:workflowstep]
     """
@@ -160,27 +163,29 @@
     prop:description str,,
     prop:warningtime int,, time that this step can take till warning (in sec)
     prop:criticaltime int,, time that this step can take
-    prop:nextsteps dict(int),,
-    prop:nextsteps_error dict(int),,
+    prop:nextsteps dict(str),,                                                                      @ref:workflowstep
+    prop:nextsteps_error dict(str),,                                                                @ref:workflowstep
     prop:jscript str,,this script will create jobsteps (like branches of a tree) and return all next jobsteps to execute
+    prop:comments list(str),,reference to comments                                                 @ref:comment deletechildren
 
 [rootmodel:job] @index
     """
     project
     """
     prop:id int,,  
-    prop:workflow int,,
+    prop:workflow str,,                                                                             @ref workflow
     prop:workflow_name str,,  
     prop:startdate int,,epoch
     prop:enddate int,,epoch
-    prop:status str,,values are: PENDING,ACTIVE,ERROR,OK,WARNING,CRITICAL
+    prop:status str,,values are:                                                                    @type:PENDING|ACTIVE|ERROR|OK|WARNING|CRITICAL
     
 [rootmodel:jobstep]
     """
     project
     """
     prop:jobguid str,,reference to job
-    prop:workflowstep_id int,,reference to workflowstep which started this jobstep
+    prop:workflow str,,                                                                             @ref workflow
+    prop:workflowstep str,,reference to workflowstep which started this jobsteps                    @ref:workflowstep
     prop:workflowstep_name str,,
     prop:description str,,
     prop:order int,,order in which the steps where executed
@@ -190,9 +195,8 @@
     prop:startdate int,,
     prop:enddate int,,
     prop:jscript str,,script which was executed
-    prop:status str,,values are: PENDING,ACTIVE,ERROR,OK,WARNING,CRITICAL
-    prop:nextsteps list(str),,after resolving the script next steps which were triggered (so is after execution), is references to other jobsteps (guid)
-    prop:comments str,,
+    prop:status str,,values are:                                                                    @type:PENDING|ACTIVE|ERROR|OK|WARNING|CRITICAL
+    prop:nextsteps list(str),,after resolving the script next steps which were triggered (so is after execution), is references to other jobsteps (guid) @ref:jobstep
     prop:logs str,,
 
 [rootmodel:project] @index
@@ -202,11 +206,11 @@
     prop:id int,,    
     prop:name str,,
     prop:descr str,,
-    prop:organizations list(int),,which organizations is proj linked to
+    prop:organizations list(str),,which organizations is proj linked to                 @ref:organization
     prop:organizations_names str,,comma separated list of names of orgs
     prop:deadline int,,epoch of when task needs to be done
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 [rootmodel:sprint] @index
     """
@@ -216,10 +220,10 @@
     prop:description str,,
     prop:start int,,epoch
     prop:stop int,,epoch
-    prop:organizations list(int),,organizations involved with this sprint
+    prop:organizations list(str),,organizations involved with this sprint               @ref:organization
     prop:organizations_names str,,comma separated list of names of orgs
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 [rootmodel:datacenter] @index
     """
@@ -227,12 +231,13 @@
     prop:id int,,  
     prop:name str,,
     prop:label str,,  
-    prop:organization int,,id of organization which owns dc
+    prop:organization str,,id of organization which owns dc                             @ref:organization
     prop:organization_name str,,
     prop:description str,,
-    prop:addresses list(str),,reference to addr
+    prop:addresses list(str),,reference to addr                                         @ref:address
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
+
 
 [rootmodel:pod] @index
     """
@@ -241,13 +246,13 @@
     prop:id int,,  
     prop:name str,,  
     prop:label str,,     
-    prop:organization int,,id of organization which owns the pod if any
+    prop:organization str,,id of organization which owns the pod if any                 @ref:organization
     prop:organization_name str,,
-    prop:datacenter int,,
+    prop:datacenter str,,                                                               @ref:organization
     prop:datacenter_name str,,
     prop:description str,,
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 [rootmodel:rack] @index
     """
@@ -255,32 +260,32 @@
     prop:id int,,    
     prop:name str,,  
     prop:label str,,      
-    prop:pod int,,
+    prop:pod str,,                                                                      @ref:pod
     prop:pod_name str,,    
-    prop:datacenter int,,
+    prop:datacenter str,,                                                               @ref:organization
     prop:datacenter_name str,,
-    prop:organization int,,id of organization which owns the rack if any
+    prop:organization str,,id of organization which owns the rack if any                @ref:organization
     prop:organization_name str,,
     prop:description str,,
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 [rootmodel:machine] @index
     """
     """
     prop:id int,,
     prop:name str,,
-    prop:organization int,,id of organization which owns the machine if any
+    prop:organization str,,id of organization which owns the machine if any             @ref:organization
     prop:organization_name str,,
     prop:label str,,
     prop:parent int,,
     prop:parent_name str,,
     prop:description str,,
     prop:type str,,
-    prop:interfaces list(interface),,
-    prop:depends list(int),, link to other machines (what does it need to work)
+    prop:interfaces list(str),,                                                         @ref interface
+    prop:depends list(str),, link to other machines (what does it need to work)         @ref machine
     prop:depends_names list(str),,
-    prop:assethost int,,who is asset hosting this machine
+    prop:assethost int,,who is asset hosting this machinehost                           @ref asset
     prop:memory int,,in GB
     prop:ssdcapacity int,,in GB
     prop:hdcapacity int,,in GB
@@ -289,24 +294,24 @@
     prop:nrcpu int,,
     prop:rootpasswd str,,encrypted root passwd
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 [rootmodel:service] @index
     """
     """
     prop:id int,,
     prop:name str,,
-    prop:organization int,,id of organization which owns the service if any
+    prop:organization str,,id of organization which owns the service if any             @ref:organization
     prop:organization_name str,,
     prop:label str,,
     prop:parent int,,
     prop:parent_name str,,
     prop:description str,,
     prop:type str,,
-    prop:serviceports list(serviceport),,
-    prop:depends list(int),, link to other services (what does it need to work)
+    prop:serviceports list(str),,                                                       @ref:serviceport
+    prop:depends list(str),, link to other services (what does it need to work)         @ref:service
     prop:depends_names list(str),,
-    prop:machinehost int,,who is machine hosting this service
+    prop:machinehost int,,who is machine hosting this service                           @ref:host
     prop:memory int,,in GB
     prop:ssdcapacity int,,in GB
     prop:hdcapacity int,,in GB
@@ -316,7 +321,7 @@
     prop:admin_name str,,name of admin e.g. admin or root
     prop:admin_passwd str,,encrypted root passwd
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 [rootmodel:serviceport] @index
     """
@@ -328,30 +333,30 @@
     prop:ipaddr6 str,, 
     prop:url str,,
     prop:port str,,
-    prop:type str,,UDP:TCP:HTTP:HTTPS:SSH
+    prop:type str,,                                                                     @types:UDP|TCP|HTTP|HTTPS|SSH
     prop:description str,,
     prop:supportremarks str,,
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 
 [rootmodel:asset] @index
     """
     """
     prop:id int,,
-    prop:organization int,,id of organization which owns the asset if any
+    prop:organization str,,id of organization which owns the asset if any               @ref:organization
     prop:organization_names str,,comma separated list of name
     prop:label str,,
-    prop:parent int,,
+    prop:parent str,,                                                                   @ref:asset
     prop:parent_name str,,
     prop:description str,,
     prop:type str,,
     prop:brand str,,
     prop:model str,,
-    prop:interfaces list(interface),,
-    prop:components list(component),,
-    prop:depends list(int),, link to other assets (what does it need to work)
+    prop:interfaces list(str),,                                                         @ref:interface
+    prop:components list(str),,                                                         @ref:component
+    prop:depends list(str),, link to other assets (what does it need to work)           @ref:asset
     prop:depends_names list(str),,
-    prop:rackid int,,
+    prop:rack str,,                                                                     @ref:rack
     prop:datacenter_name str,,
     prop:pod_name str,,
     prop:rack_name str,,
@@ -361,9 +366,9 @@
     prop:U int,,how many U taken
     prop:rackpos int,, how many U starting from bottomn
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
-[model:component] @index
+[rootmodel:component] @index
     """
     """
     prop:type str,,
@@ -372,7 +377,7 @@
     prop:model str,,
     prop:description str,,
     prop:supportremarks str,,
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                  @ref:comment deletechildren
 
 [rootmodel:interface] @index
     """
@@ -381,14 +386,14 @@
     prop:macaddr str,,
     prop:vlanid str,,
     prop:vxlanid str,,
-    prop:organization int,,id of organization which owns the ipaddr if any
-    prop:netaddr list(netaddr),, 
-    prop:connects list(int),, link to other interfaces
+    prop:organization str,,id of organization which owns the ipaddr if any          @ref:organization
+    prop:netaddr list(str),,                                                        @ref:netaddr deletechildren
+    prop:connects list(str),, link to other interfaces                              @ref:interfaces
     prop:brand str,,
     prop:model str,,
     prop:description str,,
     prop:supportremarks str,,
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 [rootmodel:netaddr] @index
     """
@@ -398,7 +403,7 @@
     prop:ipaddr6 str,, 
     prop:description str,,
     prop:supportremarks str,,
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 [rootmodel:componenttype] @index
     """
@@ -445,6 +450,6 @@
     prop:objstorid str,,reference on doc mgmt system (stored in sort of key value obj store)
     prop:description str,,
     prop:acl dict(str),,dict where key is name of group; value is R/W/E (E=Execute)
-    prop:comments list(str),,reference to comments
+    prop:comments list(str),,reference to comments                                      @ref:comment deletechildren
 
 

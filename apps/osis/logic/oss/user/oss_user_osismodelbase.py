@@ -8,15 +8,17 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     def __init__(self):
         self._P_id=0
     
-        self._P_organization=0
+        self._P_organizations=list()
     
-        self._P_organization_name=""
+        self._P_organization_names=""
     
         self._P_name=""
     
         self._P_addresses=list()
     
         self._P_comments=list()
+    
+        self._P_userids=list()
     
         self._P_contactmethods=list()
     
@@ -54,43 +56,43 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
 
 
     @property
-    def organization(self):
-        return self._P_organization
-    @organization.setter
-    def organization(self, value):
+    def organizations(self):
+        return self._P_organizations
+    @organizations.setter
+    def organizations(self, value):
         
-        if not isinstance(value, int) and value is not None:
-            if isinstance(value, basestring) and j.basetype.integer.checkString(value):
-                value = j.basetype.integer.fromString(value)
+        if not isinstance(value, list) and value is not None:
+            if isinstance(value, basestring) and j.basetype.list.checkString(value):
+                value = j.basetype.list.fromString(value)
             else:
-                msg="property organization input error, needs to be int, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
+                msg="property organizations input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_organization=value
-    @organization.deleter
-    def organization(self):
-        del self._P_organization
+        self._P_organizations=value
+    @organizations.deleter
+    def organizations(self):
+        del self._P_organizations
 
 
     @property
-    def organization_name(self):
-        return self._P_organization_name
-    @organization_name.setter
-    def organization_name(self, value):
+    def organization_names(self):
+        return self._P_organization_names
+    @organization_names.setter
+    def organization_names(self, value):
         
         if not isinstance(value, str) and value is not None:
             if isinstance(value, basestring) and j.basetype.string.checkString(value):
                 value = j.basetype.string.fromString(value)
             else:
-                msg="property organization_name input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
+                msg="property organization_names input error, needs to be str, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
                 raise RuntimeError(msg)
     
 
-        self._P_organization_name=value
-    @organization_name.deleter
-    def organization_name(self):
-        del self._P_organization_name
+        self._P_organization_names=value
+    @organization_names.deleter
+    def organization_names(self):
+        del self._P_organization_names
 
 
     @property
@@ -151,6 +153,26 @@ class oss_user_osismodelbase(j.code.classGetJSRootModelBase()):
     @comments.deleter
     def comments(self):
         del self._P_comments
+
+
+    @property
+    def userids(self):
+        return self._P_userids
+    @userids.setter
+    def userids(self, value):
+        
+        if not isinstance(value, list) and value is not None:
+            if isinstance(value, basestring) and j.basetype.list.checkString(value):
+                value = j.basetype.list.fromString(value)
+            else:
+                msg="property userids input error, needs to be list, specfile: /opt/jumpscale/apps/osis/logic/oss/model.spec, name model: user, value was:" + str(value)
+                raise RuntimeError(msg)
+    
+
+        self._P_userids=value
+    @userids.deleter
+    def userids(self):
+        del self._P_userids
 
 
     @property

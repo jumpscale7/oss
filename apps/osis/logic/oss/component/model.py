@@ -2,18 +2,18 @@ from JumpScale import j
 
 OsisBaseObject=j.core.osis.getOSISBaseObjectComplexType()
 
-from oss_job_step_osismodelbase import oss_job_step_osismodelbase
+from oss_component_osismodelbase import oss_component_osismodelbase
 
 #this class is meant to be overrided e.g. the getuniquekey, ...
 
-class oss_job_step(OsisBaseObject,oss_job_step_osismodelbase):
+class oss_component(OsisBaseObject,oss_component_osismodelbase):
 
     """
     """
 
     def __init__(self, ddict={}):
         # OsisBaseObject.__init__(self)
-        oss_job_step_osismodelbase.__init__(self)
+        oss_component_osismodelbase.__init__(self)
         if ddict <> {}:
             self.load(ddict)
         self.guid=self.guid.replace("-","")
