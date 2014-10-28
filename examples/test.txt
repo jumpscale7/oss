@@ -4,3 +4,10 @@ description=this is a test
 companyname=test
 vatnr=666
 acl=admin:RW guest:R
+
+!organization.address
+orgname=testing organization
+country=Egypt
+city=ElGouna
+citycode=42
+zone=
